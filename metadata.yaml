@@ -1,0 +1,18 @@
+---
+title: Green Paper&#58; A Community-Driven Technical Specification for Neo Blockchain
+author:
+- Igor M. Coelho
+- Vitor N. Coelho
+- Peter Lin
+- Erik Zhang
+abstract: |
+  The Green Paper is a community-driven initiative to provide a technical specification for Neo blockchain.
+  Contributions are accepted via project GitHub page, so feel free to contribute.
+  Major contributions by community members will allow member to become a co-author of the Green Paper.
+
+  &nbsp;
+numbersections: true
+documentclass: amsart
+lot: false
+lof: false
+...

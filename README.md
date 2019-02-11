@@ -5,6 +5,13 @@ Green Paper: A Community-Driven Technical Specification for Neo Blockchain
 The base document started as pure LaTeX, as usual in academic publications, however the syntax is not considered as friendly as Markdown. So, why not merge both? :)
 In order to facilitate the contributions to the document, we decided to adopt pandoc format, which allows hybrid LaTeX + Markdown syntax.
 
+### base structure
+The structure of the document consists of four files:
+- green_paper.md : main document in Mardown + LaTeX (contributors should focus on this file)
+- metadata.yaml : document metadata (authors, abstract, ...)
+- greenpaperstyle.pandoc : document style (LaTeX headings)
+- template.tex : base LaTeX template (pandoc default LaTeX template with small changes)
+
 ## build instructions
 Install pandoc and LaTeX base. On debian-based linux, you can simply run `make install`, and all dependencies will be installed.
 

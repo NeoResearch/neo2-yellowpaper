@@ -17,6 +17,10 @@ Install pandoc and LaTeX base. On debian-based linux, you can simply run `make i
 
 After pandoc and LaTeX base are available, you can simply run `make`, which will generate the green paper pdf.
 
+### building specific section
+Any section can be build using command `make section` and passing `SECTION` parameter.
+For example: `make section SECTION=08_dBFT` will build section 08.
+
 ## How to contribute
 If you know Neo technology and want to contribute, feel free to directly submit a Pull Request with the desired changes.
 Initially, the idea is to create a broad and complete initial version of the document, which will be polished in the future.

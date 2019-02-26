@@ -1,11 +1,5 @@
 # Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives { #biz }
 
-_Byzantine tolerant systems have been designed for decades and a recent boom in Blockchain inspired solutions has been boosting studies over this topic.
-While the literature has been extensively contributing towards more reliability, robustness and resilience of consensus systems, few works addressed large scale industrial cases focused on State Machine Replication with one block finality.
-This paper, besides being a didactic material, has also the potential of contributing as a scientific reference regarding the use of Byzantine Fault Resistant agent communication in the Blockchain ecosystem._
-
-Keywords: Delegated Byzantine Fault Tolerance, Multi-Agent Systems, Blockchain, Smart Contracts, Virtual Machine, NEO
-
 Test Section \ref{biz} ...
 
 \begin{figure}

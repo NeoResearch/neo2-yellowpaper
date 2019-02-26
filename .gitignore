@@ -1,3 +1,4 @@
-green_paper.pdf
+green_paper.md
+*.pdf
 *.o
 *~

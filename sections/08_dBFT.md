@@ -1,48 +1,3 @@
-# Introduction
-
-The Green Paper is a community-driven initiative to provide a technical specification for Neo blockchain.
-It is organized in sections, describing diverse details of the protocol, from consensus mechanisms, cryptography and smart contracts.
-Every part of the protocol may be covered here, although it is recommended to keep the scope as limited as possible to  fundamental pieces of the technology.
-These topics are suggested by Neo community and may be changed in the future, so feel free to contribute.
-
-# Blockchain Networks: consensus protocols, wallets, digital assets and smart contracts
-
-# Numbers on Neo
-
-All arithmetic on Neo is performed on little-endian.
-Integer values are usually represented as 32-byte big integers, allowing negative values to be represented with twos-complement (starting with top bit set to one).
-
-# Cryptography basics: Digital Signatures and Hash Functions
-
-Neo mainly uses SHA-256 and RIPEMD-160 functions for hashing.
-Digital Signatures are performed via elliptic curves (ECDSA), standard P-256 (secp256r1), which is quite similar to Bitcoin (secp256k1).
-
-# Current cryptography and NeoQS
-
-NeoQS envisioned a cryptographic system based on Lattice problems.
-In particular, in the White Paper, a mechanism based on Shortest Vector Problem (SVP) and Closest Vector Problem (CVP)
-were considered.
-
-State-of-the-art studies and reports points out that this family of problems can really generate Hard problems
-is worst case situation.
-On the other hand, slightly different mechanisms are being proposed, such as Learning with Errors (LWE) and its variant
-of Ring Learning with Errors (R-LWE).
-
-In this chapter, we describe the basic background of such problems and its perspectives of resolutions based on
-the assumption that $P != NP$.
-
-# Global Assets: UTXO vs Account Models
-
-# Interacting with NEO network: transactions, RPC and P2P protocols
-
-# Building Distributed Applications with NeoVM and NeoContract
-
-# Advanced Smart Contracts: Random Numbers, Triggers and Smart Transactions
-
-# Advanced Accounts: special locks, funds release cases, Over-The-Counter and special cryptographic accounts
-
-# Using NEO for IoT devices
-
 # Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives { #biz }
 
 _Byzantine tolerant systems have been designed for decades and a recent boom in Blockchain inspired solutions has been boosting studies over this topic.
@@ -387,9 +342,3 @@ $recvdPrepReq^t_{i,j,h,b,v}$, i=0,j=1, $h,b,v=0$:\\
 t           & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & ...\\\cline{2-10}
 \end{tabular}
 \end{minipage}
-
-
-
-# Towards the Smart Economy: the three pillars of NEO
-
-# References

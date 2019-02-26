@@ -8,5 +8,8 @@ all:
 install:
 	apt install pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-recommended texlive-latex-extra texlive-xetex
 
+merge_sections:
+	./merge_sections.sh
+
 clean:
 	rm -f green_paper.pdf

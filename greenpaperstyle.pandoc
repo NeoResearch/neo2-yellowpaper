@@ -2,3 +2,8 @@
 \usepackage{tcolorbox}
 \pagecolor{green!30}
 \usepackage[a4paper, margin=1in]{geometry}
+
+
+% no \setminus on math font
+% [WARNING] Missing character: There is no ⧵ in font [latinmodern-math.otf]/OT:script=math;
+% temporarily using \backslash instead of \setminus

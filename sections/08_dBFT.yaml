@@ -15,4 +15,5 @@ numbersections: true
 documentclass: amsart
 lot: false
 lof: false
+linkcolor: blue
 ...

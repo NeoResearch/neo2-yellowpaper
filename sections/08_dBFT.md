@@ -19,15 +19,14 @@ Byzantine
 Fault
 Tolerance (pBFT) [@castro1999practical] to the Delegated Byzantine
 Fault
-Tolerance currently used in the NEO blockchain core library (vide \href{https://github.com/neo-project/neo}{https://github.com/neo-project/neo}), which are:
+Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)), which are:
 
-\begin{itemize}
-    \item One block finality to the end-users and seed nodes;
-    \item Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
-    \item Ability of proposing blocks based information sharing of block headers;
-    \item Disable change views after commitment phase;
-    \item Regeneration mechanism able to recover failed nodes both in hardware and consensus layer.
-\end{itemize}
+* One block finality to the end-users and seed nodes;
+* Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
+* Ability of proposing blocks based information sharing of block headers;
+* Disable change views after commitment phase;
+* Regeneration mechanism able to recover failed nodes both in hardware and consensus layer.
+
 
 Furthermore, it introduces a novel mathematical model able to verify specific consensus behavior by means of a discrete model with can simulate real cases operation.
 While highlighting the positive aspects of the current NEO consensus system, the authors do not measure their efforts in criticizing its faults and negative aspects.

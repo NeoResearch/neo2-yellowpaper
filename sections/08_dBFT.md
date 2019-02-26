@@ -7,19 +7,17 @@ Test Section \ref{biz} ...
 \end{figure}
 
 
-Test [@Hao2018DynnamicPBFT] does [@Duan:2018:BAB:3243734.3243812]...
-
-Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems \cite{Hao2018DynnamicPBFT,Duan:2018:BAB:3243734.3243812,miller2016honey}, but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
-It is noteworthy that append storage applications posses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) \cite{schneider1990implementing}.
+Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
+It is noteworthy that append storage applications posses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) [@schneider1990implementing].
 In addition, a second important fact to be considered is related to the finality in appending information to the ledger.
 Final users, merchants and exchanges want to precisely known if their transaction was definitively processed or still could be reverted.
-Differently than most part of previous works in the literature, NEO blockchain \cite{Neo2015WP} proposed a Consensus mechanism with one block finality in the first layer.
+Differently than most part of previous works in the literature, NEO blockchain [@Neo2015WP] proposed a Consensus mechanism with one block finality in the first layer.
 Besides its notorious advantages for real case applications, this characteristic imposes some constraints and additional vulnerabilities.
 
 This technical material posses the main goal of highlighting the main adaptions from the classical Practical
 Byzantine
 Fault
-Tolerance (pBFT) \cite{castro1999practical} to the Delegated Byzantine
+Tolerance (pBFT) [@castro1999practical] to the Delegated Byzantine
 Fault
 Tolerance currently used in the NEO blockchain core library (vide \href{https://github.com/neo-project/neo}{https://github.com/neo-project/neo}), which are:
 
@@ -67,7 +65,7 @@ For the current NEO dBFT, the minimum number of required signatures is $M = 2f$,
 
 ## Blocking change views
 
-Known Block Hash stuck fork was recently discovered in real operation of NEO blockchain, 2017 \cite{}.
+Known Block Hash stuck fork was recently discovered in real operation of NEO blockchain, 2017.
 
 In particular, this happens due to two components of the Blocks that are selected by each node that is a primary:
 

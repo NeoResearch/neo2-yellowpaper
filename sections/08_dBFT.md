@@ -7,6 +7,8 @@ Test Section \ref{biz} ...
 \end{figure}
 
 
+Test [@Hao2018DynnamicPBFT] does [@Duan:2018:BAB:3243734.3243812]...
+
 Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems \cite{Hao2018DynnamicPBFT,Duan:2018:BAB:3243734.3243812,miller2016honey}, but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
 It is noteworthy that append storage applications posses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) \cite{schneider1990implementing}.
 In addition, a second important fact to be considered is related to the finality in appending information to the ledger.
@@ -336,3 +338,5 @@ $recvdPrepReq^t_{i,j,h,b,v}$, i=0,j=1, $h,b,v=0$:\\
 t           & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & ...\\\cline{2-10}
 \end{tabular}
 \end{minipage}
+
+&nbsp;\newline

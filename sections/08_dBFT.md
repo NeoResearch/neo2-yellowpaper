@@ -19,13 +19,13 @@ Tolerance currently used in the NEO blockchain core library (see [Neo Project Gi
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
 * Ability of proposing blocks based information sharing of block headers;
-* Disable change views after commitment phase;
-* Regeneration mechanism able to recover failed nodes both in hardware and consensus layer.
+* Avoid double exposure of block signatures by disable change views after commitment phase;
+* Regeneration mechanism able to recover failed nodes both in local hardware and software P2P consensus layer.
 
-
-Furthermore, it introduces a novel mathematical model able to verify specific consensus behavior by means of a discrete model with can simulate real cases operation.
-While highlighting the positive aspects of the current NEO consensus system, the authors do not measure their efforts in criticizing its faults and negative aspects.
-On the other hand, solutions, inspired by well-known studies from the literature, are proposed to be incorporated in the current procedure in order to achieve an even more robust and reliable mechanism.
+Furthermore, it introduces a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
+While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
+The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
+<!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
 
 The remainder of this paper is organized as follows.
 Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
@@ -55,10 +55,11 @@ Block finality in the Consensus layer level imposes the following condition pres
 In summary, the block finality provides that clients do not need to verify the majority of Consensus for SMR.
 In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol.
 
-For the current NEO dBFT, the minimum number of required signatures is $M = 2f$, where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
+For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ (as defined in The Byzantine Generals Problems @lamport1982byzantine), where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
 
-## Blocking change views
+## Multiple block signature exposure
 
+### Detected fault on dBFT v1.0
 Known Block Hash stuck fork was recently discovered in real operation of NEO blockchain, 2017.
 
 In particular, this happens due to two components of the Blocks that are selected by each node that is a primary:
@@ -66,32 +67,45 @@ In particular, this happens due to two components of the Blocks that are selecte
 * Different sets of Transactions;
 * Block Nonce.
 
-It was detected that under rare situations a given node could receive the desired `M` signatures necessary for persisting a Block and, then, suddenly, lose connection with other nodes.
+In particular, the NEO dBFT 1.0 had a simplified implementation of the pBFT without the commit stage.
+
+However, it was detected that under rare situations a given node could receive the desired `M` signatures necessary for persisting a Block and, then, suddenly, lose connection with other nodes.
 In this sense, the other nodes could detect a lack of communication (along with other fails between themselves) and generate a new block.
 Besides breaking block finality \ref{subSecblockFinality}, this problem can stuck the consensus node and any client that persists the block that was not adopted by the majority of CN.
-In addition, in a even more rare situation, $x$ nodes with $ f + 1 < x < M $ could receive a given block while the other nodes had a different block hash, stucking the whole network until a manuall decision was reached.
+In addition, in a even more rare situation, $x$ nodes with $ f + 1 < x < M $ could receive a given block while the other nodes had a different block hash, stucking the whole network until a manual decision was reached.
 
 It is noteworthy that even in an Asynchronous Consensus without timeout mechanism this case could lead to problems if the Nonce was not yet defined as well as the transactions to be inserted inside a Block.
+
+### Commit phase with change view blocking
+
+Taking into account that the aforementioned faulty could happen even with the commit phase, one should verify that nodes could stuck but not double expose its signature.
+On the other hand, other attacks could happen if malicious nodes tried to save the signature and perform specific communications.
 
 In this sense, the possibility that naturally came was:
 
 * Lock view changing ( currently implemented in the NEO dBFT) after sending your signature. This means that those who commit with that block will not sign any other proposed Block.
 
+While, on the other hand, a regeneration strategy sound compulsory to be implemented.
+
 ## Regeneration
 
-The Recover/Regeneration event is designed for responding to a given failed node that it lost part of the history.
-In this sense, if the node had failed and recovered its healthy (sending a change\_view) it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
+The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
+In this sense, if the node had failed and recovered its healthy (sending a change\_view payload) it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
+In addition, a local level of safety (which can be seen as a hardware faulty safety) should be ensured for avoiding other special attacks and possible fails.
+
+Following this both requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover it previous state, both previously known by the network or by itself.
+
 
 ## Possible faults
 
-## Pure network faults
+### Pure network faults
 
 Possible scenarios:
 
 * `f` nodes will delays messages;
 * At maximum, `f` will crash both in terms of hardware fault or software problems.
 
-## Pure byzantine faults {#subsecpureByzantineFault}
+### Pure byzantine faults {#subsecpureByzantineFault}
 
 First of all, Byzantine attacks should be designed in order that nodes will never be able to prove that it was an attack.
 
@@ -102,10 +116,6 @@ In this sense, if anyone can detect this kind of behavior then that node will au
 * at maximum, $f$, nodes will store messages;
 * at maximum, $f$, nodes will send wrong information;
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
-
-## Mixed faults
-
-## Mixed Integer Linear Programming model applied for Consensus verification (Section DEPRECATED due to the next one that contains a more detailed model)
 
 ## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol
 

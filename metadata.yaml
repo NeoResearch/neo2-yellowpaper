@@ -16,4 +16,7 @@ documentclass: amsart
 lot: false
 lof: false
 linkcolor: blue
+citecolor: blue
+urlcolor: blue
+link-citations: true
 ...

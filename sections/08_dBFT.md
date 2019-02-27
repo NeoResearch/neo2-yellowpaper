@@ -29,16 +29,35 @@ Practical BFT was first made possible by the work of Miguel Castro and Barbara L
 * Avoid double exposure of block signatures by disable change views after commitment phase;
 * Regeneration mechanism able to recover failed nodes both in local hardware and software P2P consensus layer.
 
-Furthermore, it introduces a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
+Furthermore, this document describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
 While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
 The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
 <!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
 
-The remainder of this paper is organized as follows.
+The remainder of this document is organized as follows.
 Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
 
-
 ## dBFT detailed description {#secdBFTDetails}
+
+The dBFT consensus mechanism is a state machine, with transitions depending on a round-robin scheme (to define Primary/Backup nodes) and also depending on network messages.
+
+### dBFT states
+
+dBFT states are the following:
+- Initial : initial machine state
+- Primary : depends on block height and view number
+- Backup : true if not primary, false otherwise
+- RequestSent : true if block header has been proposed, false otherwise
+- RequestReceived : true if block header has been received, false otherwise
+- ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
+- ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
+- CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
+- BlockSent : true if block has been sent, false otherwise
+- ViewChanging : true if view change mechanism has been triggered, false otherwise
+
+
+The first dBFT handled these states explicitly as flags (ConsensusState enum).
+However, dBFT 2.0 can infer this information in a implicit manner, since it has added state recovery mechanisms.
 
 ## Flowchart
 

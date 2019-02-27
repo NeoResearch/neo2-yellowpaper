@@ -61,6 +61,33 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 ## Flowchart
 
+~~~~ graphviz
+digraph dBFT {
+        //rankdir=LR;
+        size="11";
+	node [shape = circle]; Initial;
+	node [shape = doublecircle]; BlockSent;
+	node [shape = circle];
+	Initial -> Primary [ label = "round-robin" ];
+	Initial -> Backup [ label = "not primary" ];
+	Primary -> RequestSent [ label = "timeout()" ];
+	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
+	RequestReceived -> ResponseSent [ label = "block is valid" ];
+	RequestReceived -> ViewChanging [ label = "timeout()" ];
+	Primary -> ViewChanging [ label = "timeout()" ];
+	Backup -> ViewChanging [ label = "timeout()" ];
+	ResponseSent -> ViewChanging [ label = "timeout()" ];
+	RequestSent -> ViewChanging [ label = "timeout()" ];
+	ResponseSent -> CommitSent [ label = "enough preparations" ];
+	RequestSent -> CommitSent [ label = "enough preparations" ];
+	RequestReceived -> CommitSent [ label = "enough preparations" ];
+	CommitSent -> BlockSent [ label = "enough commits" ];
+	ViewChanging -> Initial [ label = "enough view change messages" ];
+}
+~~~~~~~~~~~~
+
+![dBFT State Machine\label{fig:dbft-sm}](images/dBFT_State_Machine_GreenPaper.png){width=600px}
+
 ## Pseudocode
 
 ## Signatures sharing

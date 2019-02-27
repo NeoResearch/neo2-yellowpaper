@@ -23,7 +23,7 @@ Current draft proposal includes 11 sections + references (this may be changed by
 - [05_Assets.md](05_Assets.md) : expected release date -> Q2 2019
 - [06_Transactions.md](06_Transactions.md) : expected release date -> Q2 2019
 - [07_NeoVM_NeoContract.md](07_NeoVM_NeoContract.md) : expected release date -> Q2 2019
-- [08_dBFT.md](08_dBFT.md) : expected release date -> *soon!*
+- [08_dBFT.md](08_dBFT.md) : expected release date -> **soon!**
 - [09_SmartEconomy.md](09_SmartEconomy.md) : expected release date -> Q2 2019
 - [10_IoT.md](10_IoT.md) : expected release date -> Q2 2019
 - [11_Advanced_Contracts.md](11_Advanced_Contracts.md) : expected release date -> Q2 2019

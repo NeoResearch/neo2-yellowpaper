@@ -15,6 +15,21 @@ The structure of the document consists of five files:
 
 Green Paper sections are separated on `sections/` folder (these are used as source to generate `green_paper.md` file).
 
+Current draft proposal includes 11 sections + references (this may be changed by community, as anything else!):
+- [01_Introduction.md](01_Introduction.md) : expected release date -> Q2 2019
+- [02_Blockchain_Networks.md](02_Blockchain_Networks.md) : expected release date -> Q2 2019
+- [03_Numbers.md](03_Numbers.md) : expected release date -> Q2 2019
+- [04_Cryptography.md](04_Cryptography.md) : expected release date -> Q2 2019
+- [05_Assets.md](05_Assets.md) : expected release date -> Q2 2019
+- [06_Transactions.md](06_Transactions.md) : expected release date -> Q2 2019
+- [07_NeoVM_NeoContract.md](07_NeoVM_NeoContract.md) : expected release date -> Q2 2019
+- [08_dBFT.md](08_dBFT.md) : expected release date -> _soon!_
+- [09_SmartEconomy.md](09_SmartEconomy.md) : expected release date -> Q2 2019
+- [10_IoT.md](10_IoT.md) : expected release date -> Q2 2019
+- [11_Advanced_Contracts.md](11_Advanced_Contracts.md) : expected release date -> Q2 2019
+- [12_References.md](12_References.md) : expected release date -> Q2 2019
+
+
 ## build instructions
 Install pandoc and LaTeX base. On debian-based linux, you can simply run `make install`, and all dependencies will be installed.
 

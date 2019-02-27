@@ -13,13 +13,21 @@ This technical material posses the main goal of highlighting the main adaptions 
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
 Fault Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
 
-## Background on Practical BFT
+Furthermore, it describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
+While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
+The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
+
+The remainder of this document is organized as follows.
+Section \ref{subsecBackground} provides a brief background on the the classical PBFT, while Section \ref{subsecNEOdBFT} describes the key modification made from the literature for the achievement of NEO's dBFT.
+Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
+
+## Background on Practical BFT {#subsecBackground}
 
 Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see Figure \ref{fig:bliskov}), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
 
 ![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
 
-## Diferences from Neo dBFT
+## NEO dBFT core modifications {#subsecNEOdBFT}
 
  We highlight some differences between pBFT and dBFT:
 
@@ -29,13 +37,10 @@ Practical BFT was first made possible by the work of Miguel Castro and Barbara L
 * Avoid double exposure of block signatures by disable change views after commitment phase;
 * Regeneration mechanism able to recover failed nodes both in local hardware and software P2P consensus layer.
 
-Furthermore, this document describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
-While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
-The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
+
 <!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
 
-The remainder of this document is organized as follows.
-Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
+
 
 ## dBFT detailed description {#secdBFTDetails}
 
@@ -70,7 +75,7 @@ digraph dBFT {
 	node [shape = circle];
 	Initial -> Primary [ label = "round-robin" ];
 	Initial -> Backup [ label = "not primary" ];
-	Primary -> RequestSent [ label = "timeout()" ];
+	Primary -> RequestSent [ label = "timeout(blockTime)" ];
 	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
 	RequestReceived -> ResponseSent [ label = "block is valid" ];
 	RequestReceived -> ViewChanging [ label = "timeout()" ];

@@ -10,11 +10,18 @@ Differently than most part of previous works in the literature, NEO blockchain [
 Besides its notorious advantages for real case applications, this characteristic imposes some constraints and additional vulnerabilities.
 
 This technical material posses the main goal of highlighting the main adaptions from the classical Practical
-Byzantine
-Fault
-Tolerance (pBFT) [@castro1999practical] to the Delegated Byzantine
-Fault
-Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)), which are:
+Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
+Fault Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
+
+## Background on Practical BFT
+
+Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see Figure \ref{fig:bliskov}), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
+
+![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
+
+## Diferences from Neo dBFT
+
+ We highlight some differences between pBFT and dBFT:
 
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;

@@ -2,3 +2,4 @@ green_paper.md
 *.pdf
 *.o
 *~
+/images/

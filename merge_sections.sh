@@ -8,3 +8,4 @@ for f in `ls *.md`; do
    echo "&nbsp; \newpage" >> ../green_paper.md
 done
 cd ..
+cp -r sections/images .

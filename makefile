@@ -8,12 +8,13 @@ all: merge_sections
 install:
 	apt install pandoc texlive-latex-base texlive-fonts-recommended texlive-latex-recommended texlive-latex-extra texlive-xetex
 
-section:
+section: merge_sections
 	echo building green paper section $(SECTION)
 	[ -f sections/$(SECTION).md ] && pandoc --pdf-engine=xelatex sections/$(SECTION).yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H greenpaperstyle.pandoc sections/$(SECTION).md --toc -o $(SECTION).pdf --bibliography ref.bib || echo "Section not found"
 
 merge_sections:
 	./merge_sections.sh
+	# this command is also useful to move images from sections/ to root/ (which is blacklisted on .gitignore to avoid duplicates) 
 
 clean:
 	rm -f green_paper.pdf

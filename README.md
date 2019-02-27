@@ -28,6 +28,11 @@ If you know Neo technology and want to contribute, feel free to directly submit 
 Initially, the idea is to create a broad and complete initial version of the document, which will be polished in the future.
 
 ## License
-This repository is currently MIT Licensed, but will soon migrate to a corresponding Creative Commons license (since it's more about text than code).
+This repository is currently MIT Licensed (for text and code), and Free Culture license Creative Commons 4.0 International (CC BY 4.0) for all figures and externally copyrighted material.
+
+Please, when contributing, be careful to only add figures covered by Creative Commons licenses, and give proper references to original sources.
+When adding new original material to this project, contributor agrees that it will be covered by Free Culture license Creative Commons [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Copyleft 2018-2019
+
+From Neo Community to You

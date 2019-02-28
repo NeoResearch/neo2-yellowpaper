@@ -1,6 +1,6 @@
 # Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives { #biz }
 
-_This section is part of the Yellow Paper ^[See [Neo Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
+_This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
 Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
 It is noteworthy that append storage applications posses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) [@schneider1990implementing].
@@ -49,16 +49,26 @@ The dBFT consensus mechanism is a state machine, with transitions depending on a
 ### dBFT states
 
 dBFT states are the following:
-- Initial : initial machine state
-- Primary : depends on block height and view number
-- Backup : true if not primary, false otherwise
-- RequestSent : true if block header has been proposed, false otherwise
-- RequestReceived : true if block header has been received, false otherwise
-- ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
-- ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
-- CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
-- BlockSent : true if block has been sent, false otherwise
-- ViewChanging : true if view change mechanism has been triggered, false otherwise
+
+* Initial : initial machine state
+
+* Primary : depends on block height and view number
+
+* Backup : true if not primary, false otherwise
+
+* RequestSent : true if block header has been proposed, false otherwise
+
+* RequestReceived : true if block header has been received, false otherwise
+
+* ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
+
+* ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
+
+* CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
+
+* BlockSent : true if block has been sent, false otherwise
+
+* ViewChanging : true if view change mechanism has been triggered, false otherwise
 
 
 The first dBFT handled these states explicitly as flags (ConsensusState enum).

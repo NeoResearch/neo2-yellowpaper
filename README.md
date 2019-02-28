@@ -1,8 +1,8 @@
 # yellowpaper
-Neo Community Yellow Paper: A Community-Driven Technical Specification for Neo Blockchain
+Community Yellow Paper: A Technical Specification for Neo Blockchain
 
 ## document format
-The Neo Community Yellow Paper (NCYP) base document started as pure LaTeX, as usual in academic publications, however the syntax is not considered as friendly as Markdown. So, why not merge both? :)
+The Community Yellow Paper base document started as pure LaTeX, as usual in academic publications, however the syntax is not considered as friendly as Markdown. So, why not merge both? :)
 In order to facilitate the contributions to the document, we decided to adopt pandoc format, which allows hybrid LaTeX + Markdown syntax.
 
 ### base structure
@@ -13,7 +13,7 @@ The structure of the document consists of five files:
 - [template.tex](template.tex) : base LaTeX template (pandoc default LaTeX template with small changes)
 - [references.bib](references.bib) : bibliography in BibTeX format
 
-NCYP sections are separated on `sections/` folder (these are used as source to generate `yellow_paper.md` file).
+Yellow Paper sections are separated on `sections/` folder (these are used as source to generate `yellow_paper.md` file).
 
 Current draft proposal includes 11 sections + references (this may be changed by community, as anything else!):
 - [01_Introduction.md](sections/01_Introduction.md) : expected release date -> Q2 2019

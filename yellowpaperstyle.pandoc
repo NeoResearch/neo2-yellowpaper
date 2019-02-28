@@ -1,6 +1,8 @@
 \usepackage{pagecolor,lipsum}% http://ctan.org/pkg/{pagecolor,lipsum}
 \usepackage{tcolorbox}
-\pagecolor{green!30}
+\definecolor{lightgoldenrodyellow}{rgb}{0.98, 0.98, 0.82}
+%\pagecolor{yellow!30}
+\pagecolor{lightgoldenrodyellow}
 \usepackage[a4paper, margin=1in]{geometry}
 
 

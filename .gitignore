@@ -1,4 +1,6 @@
-green_paper.md
+yellow_paper.md
+*.deb
+*.deb.*
 *.pdf
 *.o
 *~

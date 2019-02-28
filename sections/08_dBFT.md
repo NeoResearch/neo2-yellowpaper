@@ -76,6 +76,11 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 ## Flowchart
 
+Figure \ref{fig:dbft-sm} presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
+The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
+Given `H`, a round-robin procedure detects if current replica is...
+
+
 ~~~~ graphviz
 digraph dBFT {
         //rankdir=LR;
@@ -101,7 +106,7 @@ digraph dBFT {
 }
 ~~~~~~~~~~~~
 
-![dBFT State Machine\label{fig:dbft-sm}](images/dBFT_State_Machine_GreenPaper.png){width=600px}
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](images/dBFT_State_Machine_GreenPaper.png){width=600px}
 
 ## Pseudocode
 
@@ -191,45 +196,112 @@ We present a MILP model for failures and attacks on a BFT blockchain protocol.
 
 Parameters:
 
-\begin{description}
- \item  [{$i \in R$}] consensus replica $i$ from set of replicas $R$. $R^{BYZ}$ is byzantine set. $R^{OK}$ is non-byzantine set. $R = R^{OK} \cup R^{BYZ}$, such that $R^{OK} \cap R^{BYZ} = \emptyset$.
- \item  [$f$] number of faulty/Byzantine replicas. $f = |R^{BYZ}|$.
- \item  [$N$] total number of replicas. $N = |R| = |R^{OK}| + |R^{BYZ}| = 3f + 1$.
- \item  [$M$] safety level. $M = 2f + 1$.
- \item  [{$b \in B$}] block $b$ from set of possible proposed blocks $B$ (may be understood as block hash).
- $B = \{b_0, b_1, b_2, \cdots \}$.
- \item  [{$h \in H$}] height $h$ from set of possible heights $H$ (tests may only require two or three heights). $H = \{h_0, h_1, h_2\}$.
- % Igor, ainda não entendi esse height - porque não simulamos apenas para 1 height?
- \item  [{$v \in V$}] view $v$ from set of possible views $V$ (number of views may be limited to the number of consensus nodes $N$). $V = \{v_0, v_1, \cdots , v_{N-1}\}$
- \item  [{$t \in T$}] time unit $t$ from set of discrete time units $T$.
- $T = \{t_0, t_1, t_2,  \cdots \}$.
- %\item  [{$Byz_{i}$}] binary variable that indicates if Consensus Node $i$ is Byzantine.
-\end{description}
+$i \in R$
+
+: consensus replica $i$ from set of replicas $R$. $R^{BYZ}$ is byzantine set. $R^{OK}$ is non-byzantine set. $R = R^{OK} \cup R^{BYZ}$, such that $R^{OK} \cap R^{BYZ} = \emptyset$.
+
+$f$
+
+: number of faulty/Byzantine replicas. $f = |R^{BYZ}|$.
+
+$N$
+
+: total number of replicas. $N = |R| = |R^{OK}| + |R^{BYZ}| = 3f + 1$.
+
+$M$
+
+: safety level. $M = 2f + 1$.
+
+
+$b \in B$
+
+: block $b$ from set of possible proposed blocks $B$ (may be understood as block hash).  $B = \{b_0, b_1, b_2, \cdots \}$.
+
+$h \in H$
+
+: height $h$ from set of possible heights $H$ (tests may only require two or three heights). $H = \{h_0, h_1, h_2\}$. Multiple heights are considered, such that block generation can be simulated over a bigger horizon (including primary changes).
+
+$v \in V$
+
+: view $v$ from set of possible views $V$ (number of views may be limited to the number of consensus nodes $N$). $V = \{v_0, v_1, \cdots , v_{N-1}\}$
+
+$t \in T$
+
+: time unit $t$ from set of discrete time units $T$. $T = \{t_0, t_1, t_2,  \cdots \}$.
+
 
 Variables:
-\begin{description}
- \item  [{$primary_{i,h,v}$}] binary variable that indicates if Consensus Node $i$ is primary at height $h$ view $v$.
-% \item  [{$state^t_{i,h,b,v}$}] binary variable that indicates if Consensus Node $i$ is on view $v$ at height $h$, with previous block $b$, at time $t$.
-\item  [$initialized^{t}_{i, h, v}$] binary variable that indicates if replica $i \in R$ is at height $h$ and view $v$, on time $t$
-\item  [$SendPrepReq^{t}_{i, h, b, v}$] binary variable that indicates if replica $i \in R$ is sending Prepare Request message (to all nodes) at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+$primary_{i,h,v}$
+
+: binary variable that indicates if Consensus Node $i$ is primary at height $h$ view $v$.
+
+$initialized^{t}_{i, h, v}$
+
+: binary variable that indicates if replica $i \in R$ is at height $h$ and view $v$, on time $t$
+
+$SendPrepReq^{t}_{i, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ is sending Prepare Request message (to all nodes) at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
 % Nao entendi esse only once, faltou o View na descricao, nao? Caso o view seja outro ela pode ser setada denovo
-\item  [$SendPrepResp^{t}_{i, h, b, v}$] binary variable that indicates if replica $i \in R$ is sending Prepare Response message (to all nodes) at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-\item  [$RecvPrepReq^{t}_{i, j, h, b, v}$] binary variable that indicates if replica $i \in R$ received a Prepare Request message from replica $j$ at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-\item  [$RecvPrepResp^{t}_{i, j, h, b, v}$] binary variable that indicates if replica $i \in R$ received a Prepare Response message from replica $j$ at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-\item  [{$BlockRelay^t_{i, h, b}$}] binary variable that indicates if replica $i$ has relayed block $b$ at height $h$, on time $t$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-\item  [$RecvBlkPersist^{t}_{i, j, h, b}$] binary variable that indicates if replica $i \in R$ received a Block Relay message from replica $j$ at height $h$ on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-\item  [$sentPrepReq^{t}_{i, h, b, v}$] binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Prepare Request message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-\item  [$sentPrepResp^{t}_{i, h, b, v}$] binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Prepare Response message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-\item  [$recvdPrepReq^{t}_{i, j, h, b, v}$] binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Prepare Request message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-\item  [$recvdPrepResp^{t}_{i, j, h, b, v}$] binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Prepare Response message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-\item  [$sentBlkPersist^{t}_{i, h, b}$] binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Block Relay message at height $h$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+$SendPrepResp^{t}_{i, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ is sending Prepare Response message (to all nodes) at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+
+$RecvPrepReq^{t}_{i, j, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ received a Prepare Request message from replica $j$ at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+$RecvPrepResp^{t}_{i, j, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ received a Prepare Response message from replica $j$ at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+
+$BlockRelay^t_{i, h, b}$
+
+: binary variable that indicates if replica $i$ has relayed block $b$ at height $h$, on time $t$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+$RecvBlkPersist^{t}_{i, j, h, b}$
+
+: binary variable that indicates if replica $i \in R$ received a Block Relay message from replica $j$ at height $h$ on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
+
+
+$sentPrepReq^{t}_{i, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Prepare Request message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+$sentPrepResp^{t}_{i, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Prepare Response message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+
+$recvdPrepReq^{t}_{i, j, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Prepare Request message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+$recvdPrepResp^{t}_{i, j, h, b, v}$
+
+: binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Prepare Response message at height $h$ and view $v$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+
+$sentBlkPersist^{t}_{i, h, b}$
+
+: binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Block Relay message at height $h$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
 % Nao se assumi que um byzantine poderia dar dois relays diferentes em views distintos?
-\item  [$recvdBlkPersist^{t}_{i, j, h, b}$] binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Block Relay message at height $h$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-\item  [{$blockRelayed_{b}$}] binary variable that indicates if block $b$ was relayed (on any time, height or view).
-\end{description}
+
+$recvdBlkPersist^{t}_{i, j, h, b}$
+
+: binary variable that indicates if replica $i \in R$ has received (in past) from replica $j$ a Block Relay message at height $h$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
+
+$blockRelayed_{b}$
+
+: binary variable that indicates if block $b$ was relayed (on any time, height or view).
 
 
 Objective function:
+
 \begin{equation}
     maximize \sum_{b \in B} blockRelayed_{b}
 \end{equation}

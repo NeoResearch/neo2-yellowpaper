@@ -302,15 +302,13 @@ $blockRelayed_{b}$
 
 Objective function:
 
-\begin{equation}
-    maximize \sum_{b \in B} blockRelayed_{b}
-\end{equation}
+(@obj) $maximize \sum_{b \in B} blockRelayed_{b}$
 
 The adversary can control $f$ replicas, but the other $M$ replicas must follow dBFT algorithm.
 The adversary can choose any delay for any message (up to maximum simulation time $|T|$).
 If it wants to shutdown the whole network, no blocks will be ever produced and objective will be zero (minimum possible).
 So, adversary will try to maximize blocks produced by manipulating delays in a clever way.
-Objective function is bounded to [$0$, $|B|$].
+As described by Eq. (@obj), objective function is bounded to [$0$, $|B|$].
 
 Constraints:
 

@@ -35,11 +35,15 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 * Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
 
 The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order". They also considered public-key cryptography to validate identify of replicas, which is also the same for NEO dBFT. Since algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
+The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
 
+PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from 2f+1 nodes in order to move forward (to the next operation).
+This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
+One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existance of thousands valid blocks for a same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
 
 ## NEO dBFT core modifications {#subsecNEOdBFT}
 
- We highlight some differences between pBFT and dBFT:
+ We highlight some differences between PBFT and dBFT:
 
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;

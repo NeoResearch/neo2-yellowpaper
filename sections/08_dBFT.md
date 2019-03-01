@@ -28,6 +28,13 @@ Practical BFT was first made possible by the work of Miguel Castro and Barbara L
 
 ![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
 
+Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup nodes, the proposed algorithm guarantees _liveness_ and _safety_ to the network, if at most $f$ nodes are faulty/byzantine^[The name Byzantine refers to arbitrary behavior, and was coined by Leslie Lamport and others on paper "The Byzantine Generals Problem"].
+
+* Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for NEO network and blockchain protocols on general.
+
+* Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, BFT can prevent attacks from malicious network delays that cannot grow indefinitely.
+
+
 ## NEO dBFT core modifications {#subsecNEOdBFT}
 
  We highlight some differences between pBFT and dBFT:

@@ -3,23 +3,24 @@
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
 Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
-It is noteworthy that append storage applications posses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) [@schneider1990implementing].
+It is noteworthy that append storage applications poses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) [@schneider1990implementing].
 In addition, a second important fact to be considered is related to the finality in appending information to the ledger.
-Final users, merchants and exchanges want to precisely known if their transaction was definitively processed or still could be reverted.
-Differently than most part of previous works in the literature, NEO blockchain [@Neo2015WP] proposed a Consensus mechanism with one block finality in the first layer.
-Besides its notorious advantages for real case applications, this characteristic imposes some constraints and additional vulnerabilities.
+Final users, merchants and exchanges want to precisely know if their transaction was definitively processed or still could be reverted.
+Differently than most part of previous works in the literature, NEO blockchain [@Neo2015WP] proposed a Consensus mechanism with **one block finality** in the **first layer**.
+Besides its notorious advantages for real case applications, this characteristic imposes some constraints, also additional vulnerabilities and challenges.7
 
 This technical material posses the main goal of highlighting the main adaptions from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
 Fault Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
-
 Furthermore, it describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
 While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
 The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
 
 The remainder of this document is organized as follows.
-Section \ref{subsecBackground} provides a brief background on the the classical PBFT, while Section \ref{subsecNEOdBFT} describes the key modification made from the literature for the achievement of NEO's dBFT.
+Section \ref{subsecBackground} provides a brief background on the the classical PBFT.
+Section \ref{subsecNEOdBFT} describes the key modification made from the literature for the achievement of NEO's dBFT.
 Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
+Finally, Section \ref{subsec:dBFT_MILP} proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
 
 ## Background on Practical BFT {#subsecBackground}
 
@@ -190,7 +191,8 @@ In this sense, if anyone can detect this kind of behavior then that node will au
 * at maximum, $f$, nodes will send wrong information;
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
 
-## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol
+
+## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#subsec:dBFT_MILP}
 
 We present a MILP model for failures and attacks on a BFT blockchain protocol.
 

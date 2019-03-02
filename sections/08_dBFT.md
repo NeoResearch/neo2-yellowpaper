@@ -101,12 +101,12 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 ## Flowchart
 
-@Fig:dbft-sm presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
+[Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
 Given `H`, a round-robin procedure detects if current replica is...
 
 
-~~~~ graphviz
+~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90%}
 digraph dBFT {
         //rankdir=LR;
         size="11";
@@ -131,7 +131,11 @@ digraph dBFT {
 }
 ~~~~~~~~~~~~
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](images/dBFT_State_Machine_GreenPaper.png){width=600px}
+<!-- BEGIN COMMENT -->
+
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/cdfcdaf89b9721f4cb5db565147c480a110c71d5.pdf){width=90%}
+
+<!-- END COMMENT -->
 
 ## Pseudocode
 

@@ -2,7 +2,9 @@ yellow_paper.md
 *.tar.gz
 *.deb
 *.deb.*
-*.pdf
 *.o
 *~
 /images/
+build
+yellow_paper.pdf
+08_dBFT.pdf

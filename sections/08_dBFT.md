@@ -17,14 +17,14 @@ While highlighting the positive aspects of the current NEO consensus system,  th
 The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
 
 The remainder of this document is organized as follows.
-@Sec:Background provides a brief background on the the classical PBFT.
-@Sec:NEOdBFT describes the key modification made from the literature for the achievement of NEO's dBFT.
-@Sec:dBFTDetails details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
-Finally, @Sec:dBFT_MILP proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
+[Section @Sec:Background] provides a brief background on the the classical PBFT.
+[Section @Sec:NEOdBFT] describes the key modification made from the literature for the achievement of NEO's dBFT.
+[Section @Sec:dBFTDetails] details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
+Finally, [Section @Sec:dBFT_MILP] proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
 
 ## Background on Practical BFT {#sec:Background}
 
-Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see @Fig:bliskov), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
+Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see [Figure @Fig:bliskov]), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
 
 ![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
 
@@ -143,14 +143,14 @@ The trade-off that borders the discussions is the use bandwidth while the notori
 
 ## Block finality {#subSecblockFinality}
 
-Block finality in the Consensus layer level imposes the following condition presented on  @Eq:blockFinality, which defines that there should not exist two different blocks for a given height $h$, in any time interval $t$.
+Block finality in the Consensus layer level imposes the following condition presented on [Equation @Eq:blockFinality], which defines that there should not exist two different blocks for a given height $h$, in any time interval $t$.
 
 $$ \forall h \in \{0,1, \cdots, t\} \Rightarrow b_t^i = b_t^j $$ {#eq:blockFinality}
 
 In summary, the block finality provides that clients do not need to verify the majority of Consensus for SMR.
 In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol.
 
-For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ (as defined in The Byzantine Generals Problems [@lamport1982byzantine]), where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
+For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ as defined in The Byzantine Generals Problems [@lamport1982byzantine], where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
 
 ## Multiple block signature exposure
 
@@ -331,7 +331,7 @@ The adversary can control $f$ replicas, but the other $M$ replicas must follow d
 The adversary can choose any delay for any message (up to maximum simulation time $|T|$).
 If it wants to shutdown the whole network, no blocks will be ever produced and objective will be zero (minimum possible).
 So, adversary will try to maximize blocks produced by manipulating delays in a clever way.
-As described by @Eq:obj, objective function is bounded to [$0$, $|B|$].
+As described by [Equation @Eq:obj], objective function is bounded to [$0$, $|B|$].
 
 Constraints:
 

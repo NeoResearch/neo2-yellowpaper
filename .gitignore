@@ -5,6 +5,7 @@ yellow_paper.md
 *.o
 *~
 /images/
+/graphviz-images/
 build
 yellow_paper.pdf
 08_dBFT.pdf

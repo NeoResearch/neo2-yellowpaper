@@ -108,6 +108,7 @@ Given `H`, a round-robin procedure detects if current replica is...
 
 ~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90%}
 digraph dBFT {
+  graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
         size="11";
 	node [shape = circle]; Initial;
@@ -133,7 +134,7 @@ digraph dBFT {
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/cdfcdaf89b9721f4cb5db565147c480a110c71d5.jpg)
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/a46c478b7ab8edd61f18c09392ad740e18fc32a4.jpg)
 
 <!-- END COMMENT -->
 

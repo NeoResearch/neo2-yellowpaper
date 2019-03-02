@@ -133,7 +133,7 @@ digraph dBFT {
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/cdfcdaf89b9721f4cb5db565147c480a110c71d5.pdf){width=90%}
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/cdfcdaf89b9721f4cb5db565147c480a110c71d5.png){width=90%}
 
 <!-- END COMMENT -->
 

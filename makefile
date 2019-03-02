@@ -29,11 +29,12 @@ debian_install:
 	apt install graphviz libgraphviz-dev python python-pip
 	pip install pygraphviz
 	pip install pandocfilters
-	# https://raw.githubusercontent.com/jgm/pandocfilters/master/examples/graphviz.py # (already done!)
+	# wget https://raw.githubusercontent.com/jgm/pandocfilters/master/examples/graphviz.py # (already done!)
+	# wget https://raw.githubusercontent.com/jgm/pandocfilters/master/examples/comments.py # (already done!)
 
 section: merge_sections
 	echo building yellow paper section $(SECTION)
-	[ -f sections/$(SECTION).md ] && pandoc -F pandoc-crossref --pdf-engine=xelatex sections/$(SECTION).yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H yellowpaperstyle.pandoc sections/$(SECTION).md --toc -o $(SECTION).pdf --bibliography references.bib || echo "Section not found"
+	[ -f sections/$(SECTION).md ] && pandoc -F pandoc-crossref -F ./graphviz.py -F ./comments.py --pdf-engine=xelatex sections/$(SECTION).yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H yellowpaperstyle.pandoc sections/$(SECTION).md --toc -o $(SECTION).pdf --bibliography references.bib || echo "Section not found"
 
 merge_sections:
 	./merge_sections.sh

@@ -3,11 +3,11 @@
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
 Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
-It is noteworthy that append storage applications poses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication (SMR) [@schneider1990implementing].
+It is noteworthy that append storage applications poses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication [@schneider1990implementing].
 In addition, a second important fact to be considered is related to the finality in appending information to the ledger.
 Final users, merchants and exchanges want to precisely know if their transaction was definitively processed or still could be reverted.
-Differently than most part of previous works in the literature, NEO blockchain [@Neo2015WP] proposed a Consensus mechanism with **one block finality** in the **first layer**.
-Besides its notorious advantages for real case applications, this characteristic imposes some constraints, also additional vulnerabilities and challenges.7
+Differently than most part of previous works in the literature, NEO blockchain proposed a Consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
+Besides its notorious advantages for real case applications, this characteristic imposes some constraints, also additional vulnerabilities and challenges.
 
 This technical material posses the main goal of highlighting the main adaptions from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
@@ -17,14 +17,14 @@ While highlighting the positive aspects of the current NEO consensus system,  th
 The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
 
 The remainder of this document is organized as follows.
-Section \ref{subsecBackground} provides a brief background on the the classical PBFT.
-Section \ref{subsecNEOdBFT} describes the key modification made from the literature for the achievement of NEO's dBFT.
-Section \ref{secdBFTDetails} details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
-Finally, Section \ref{subsec:dBFT_MILP} proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
+@Sec:Background provides a brief background on the the classical PBFT.
+@Sec:NEOdBFT describes the key modification made from the literature for the achievement of NEO's dBFT.
+@Sec:dBFTDetails details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
+Finally, @Sec:dBFT_MILP proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
 
-## Background on Practical BFT {#subsecBackground}
+## Background on Practical BFT {#sec:Background}
 
-Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see Figure \ref{fig:bliskov}), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
+Practical BFT was first made possible by the work of Miguel Castro and Barbara Liskov (see @Fig:bliskov), entitled "Practical Byzantine Fault Tolerance" [@castro1999practical].
 
 ![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
 
@@ -46,13 +46,13 @@ Backup $i$ accept pre-prepare if signature is correct, $k$ is in valid interval^
 So, at this point, for a given view, the non-faulty replicas already agree on total order for requests.
 As soon as $f+1$ non-faulty are `prepared`, network is `committed`.
 
-* Every `prepared` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes with become `committed`. 
+* Every `prepared` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes with become `committed`.
 
 PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from 2f+1 nodes in order to move forward (to the next operation).
 This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
 One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existance of thousands valid blocks for a same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
 
-## NEO dBFT core modifications {#subsecNEOdBFT}
+## NEO dBFT core modifications {#sec:NEOdBFT}
 
  We highlight some differences between PBFT and dBFT:
 
@@ -67,7 +67,7 @@ One difference is that, for PBFT, clients submit atomic and independent operatio
 
 
 
-## dBFT detailed description {#secdBFTDetails}
+## dBFT detailed description {#sec:dBFTDetails}
 
 The dBFT consensus mechanism is a state machine, with transitions depending on a round-robin scheme (to define Primary/Backup nodes) and also depending on network messages.
 
@@ -101,7 +101,7 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 ## Flowchart
 
-Figure \ref{fig:dbft-sm} presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
+@Fig:dbft-sm presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
 Given `H`, a round-robin procedure detects if current replica is...
 
@@ -143,17 +143,14 @@ The trade-off that borders the discussions is the use bandwidth while the notori
 
 ## Block finality {#subSecblockFinality}
 
-Block finality in the Consensus layer level imposes the following condition presented at Eq. \eqref{eq:blockFinality}, which defines that there should not exist two different blocks for a given height $h$, in any time interval $t$.
+Block finality in the Consensus layer level imposes the following condition presented on  @Eq:blockFinality, which defines that there should not exist two different blocks for a given height $h$, in any time interval $t$.
 
-\begin{equation}
-    \forall h \in \{0,1, \cdots, t\} \Rightarrow b_t^i = b_t^j
-    \label{eq:blockFinality}
-\end{equation}
+$$ \forall h \in \{0,1, \cdots, t\} \Rightarrow b_t^i = b_t^j $$ {#eq:blockFinality}
 
 In summary, the block finality provides that clients do not need to verify the majority of Consensus for SMR.
 In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol.
 
-For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ (as defined in The Byzantine Generals Problems @lamport1982byzantine), where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
+For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ (as defined in The Byzantine Generals Problems [@lamport1982byzantine]), where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
 
 ## Multiple block signature exposure
 
@@ -216,7 +213,7 @@ In this sense, if anyone can detect this kind of behavior then that node will au
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
 
 
-## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#subsec:dBFT_MILP}
+## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#sec:dBFT_MILP}
 
 We present a MILP model for failures and attacks on a BFT blockchain protocol.
 
@@ -328,13 +325,13 @@ $blockRelayed_{b}$
 
 Objective function:
 
-(@obj) $maximize \sum_{b \in B} blockRelayed_{b}$
+$$maximize \sum_{b \in B} blockRelayed_{b}$$ {#eq:obj}  <!-- requires pandoc-crossref -->
 
 The adversary can control $f$ replicas, but the other $M$ replicas must follow dBFT algorithm.
 The adversary can choose any delay for any message (up to maximum simulation time $|T|$).
 If it wants to shutdown the whole network, no blocks will be ever produced and objective will be zero (minimum possible).
 So, adversary will try to maximize blocks produced by manipulating delays in a clever way.
-As described by Eq. (@obj), objective function is bounded to [$0$, $|B|$].
+As described by @Eq:obj, objective function is bounded to [$0$, $|B|$].
 
 Constraints:
 

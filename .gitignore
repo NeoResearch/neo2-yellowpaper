@@ -1,4 +1,5 @@
 yellow_paper.md
+*.tar.gz
 *.deb
 *.deb.*
 *.pdf

@@ -19,4 +19,7 @@ linkcolor: blue
 citecolor: blue
 urlcolor: blue
 link-citations: true
+cref : true
+linkReferences: true
+nameInLink: true
 ...

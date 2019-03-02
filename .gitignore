@@ -7,5 +7,4 @@ yellow_paper.md
 /images/
 /graphviz-images/
 build
-yellow_paper.pdf
-08_dBFT.pdf
+*.pdf

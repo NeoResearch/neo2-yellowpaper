@@ -1,5 +1,6 @@
 all: merge_sections
 	pandoc -F pandoc-crossref -F ./graphviz.py -F ./comments.py --pdf-engine=xelatex metadata.yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H yellowpaperstyle.pandoc yellow_paper.md --toc -o yellow_paper.pdf --bibliography references.bib
+	(cd graphviz-images && mogrify -format jpg *.pdf)
 	cp -r graphviz-images sections/
 #	pandoc --pdf-engine=xelatex metadata.yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H yellowpaperstyle.pandoc yellow_paper.md -V documentclass:amsart --toc -V lot:true -V lof:true -o yellow_paper.pdf
 #	pandoc --pdf-engine=xelatex metadata.yaml --template=template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H yellowpaperstyle.pandoc yellow_paper.md -V documentclass:amsart -o yellow_paper.pdf
@@ -18,6 +19,8 @@ debian_install:
 	mv pandoc-crossref /usr/bin/
 	mv pandoc-crossref.1 /usr/share/man/man1/
 	mandb
+	# install imagemagick (for mogrify package)
+	apt install imagemagick
 	# install graphviz filter
 	## (depends on haskell cabal)
 	##apt install cabal-install graphviz

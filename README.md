@@ -30,7 +30,7 @@ Current draft proposal includes 11 sections + references (this may be changed by
 - [12_References.md](sections/12_References.md) : expected release date -> Q2+ 2019
 
 
-## build instructions
+## build instructions (manual build)
 Install pandoc and LaTeX base. On debian-based linux, you can simply run `make install`, and all dependencies will be installed.
 
 After pandoc and LaTeX base are available, you can simply run `make`, which will generate the yellow paper pdf.
@@ -39,12 +39,14 @@ After pandoc and LaTeX base are available, you can simply run `make`, which will
 Any section can be build using command `make section` and passing `SECTION` parameter.
 For example: `make section SECTION=08_dBFT` will build section 08.
 
-### building using docker
+## automatically building using docker
 The easiest way to build is by using docker.
 
 * Build the docker image using `docker_build.sh`
 
 * Compile the yellow paper using `docker_run.sh`
+
+* Output will be generated as `build/yellow_paper.pdf`
 
 ## How to contribute
 If you know Neo technology and want to contribute, feel free to directly submit a Pull Request with the desired changes.

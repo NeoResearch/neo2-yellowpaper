@@ -103,6 +103,7 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 [Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
+Given `T` as standard block time, currently set to $15$ seconds; `v` as current view number (starting from $v=0$); $exp(i)$ is set to $2^i$; $t(H')$ is block timestamp for height $H'$.
 Given `H`, a round-robin procedure detects if current replica is...
 
 
@@ -116,25 +117,25 @@ digraph dBFT {
 	node [shape = circle];
 	Initial -> Primary [ label = "round-robin" ];
 	Initial -> Backup [ label = "not primary" ];
-	Primary -> RequestSent [ label = "timeout(blockTime)" ];
+	Primary -> RequestSent [ label = "timeout(t(H) + T)" ];
 	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
 	RequestReceived -> ResponseSent [ label = "block is valid" ];
-	RequestReceived -> ViewChanging [ label = "timeout()" ];
-	Primary -> ViewChanging [ label = "timeout()" ];
-	Backup -> ViewChanging [ label = "timeout()" ];
-	ResponseSent -> ViewChanging [ label = "timeout()" ];
-	RequestSent -> ViewChanging [ label = "timeout()" ];
+	RequestReceived -> ViewChanging [ label = "timeout(T exp(v))" ];
+	Primary -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
+	Backup -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
+	ResponseSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
+	RequestSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
 	ResponseSent -> CommitSent [ label = "enough preparations" ];
 	RequestSent -> CommitSent [ label = "enough preparations" ];
 	RequestReceived -> CommitSent [ label = "enough preparations" ];
 	CommitSent -> BlockSent [ label = "enough commits" ];
-	ViewChanging -> Initial [ label = "enough view change messages" ];
+	ViewChanging -> Initial [ label = "enough view change messages\n v=v+1" ];
 }
 ~~~~~~~~~~~~
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/a46c478b7ab8edd61f18c09392ad740e18fc32a4.jpg)
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/9ec1c27ea3a67e60c3dfdd89d8ab7b93bb28999c.jpg)
 
 <!-- END COMMENT -->
 

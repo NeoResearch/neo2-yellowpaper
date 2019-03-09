@@ -122,11 +122,11 @@ digraph dBFT {
 	Primary -> RequestSent [ label = "timeout(t(H) + T)" ];
 	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
 	RequestReceived -> ResponseSent [ label = "block is valid" ];
-	RequestReceived -> ViewChanging [ label = "timeout(T exp(v))" ];
-	Primary -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
-	Backup -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
-	ResponseSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
-	RequestSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v))" ];
+	RequestReceived -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
+	Primary -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
+	Backup -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
+	ResponseSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
+	RequestSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
 	ResponseSent -> CommitSent [ label = "enough preparations" ];
 	RequestSent -> CommitSent [ label = "enough preparations" ];
 	RequestReceived -> CommitSent [ label = "enough preparations" ];
@@ -137,7 +137,7 @@ digraph dBFT {
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/9ec1c27ea3a67e60c3dfdd89d8ab7b93bb28999c.jpg)
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/4c404230c3ea695955dbb69c7e6ecc9623875dec.jpg)
 
 <!-- END COMMENT -->
 

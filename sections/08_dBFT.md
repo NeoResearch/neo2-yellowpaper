@@ -103,7 +103,9 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 [Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
-Given `T` as standard block time, currently set to $15$ seconds; `v` as current view number (starting from $v=0$); $exp(i)$ is set to $2^i$; $t(H')$ is block timestamp for height $H'$.
+Given `T` as standard block time (15 seconds); `v` as current view number (starting from $v=0$); $exp(j)$ is set to $2^j$; `i` as consensus index; `R` as total number of consensus nodes.
+This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations under brackets `{}` represent time constraints (`C:=0` resets clock).
+
 Given `H`, a round-robin procedure detects if current replica is...
 
 

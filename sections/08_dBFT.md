@@ -116,22 +116,22 @@ digraph dBFT {
 	node [shape = circle]; Initial;
 	node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
-  Empty -> Initial [label = "v=0"];
-	Initial -> Primary [ label = "round-robin" ];
-	Initial -> Backup [ label = "not primary" ];
-	Primary -> RequestSent [ label = "timeout(t(H) + T)" ];
-	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
-	RequestReceived -> ResponseSent [ label = "block is valid" ];
-	RequestReceived -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
-	Primary -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
-	Backup -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
-	ResponseSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
-	RequestSent -> ViewChanging [ label = "timeout(t(H) + T*exp(v+1))" ];
-	ResponseSent -> CommitSent [ label = "enough preparations" ];
-	RequestSent -> CommitSent [ label = "enough preparations" ];
-	RequestReceived -> CommitSent [ label = "enough preparations" ];
-	CommitSent -> BlockSent [ label = "enough commits" ];
-	ViewChanging -> Initial [ label = "enough view change messages\n v=v+1" ];
+  Empty -> Initial [label = "OnStart\n v := 0\n {C := 0}"];
+	Initial -> Primary [ label = "(H + v) mod R = i" ];
+	Initial -> Backup [ label = "not (H + v) mod R = i" ];
+	Primary -> RequestSent [ label = "{C >= T}" ];
+	Backup -> RequestReceived [ label = "OnPrepareRequest" ];
+	RequestReceived -> ResponseSent [ label = "ValidBlock" ];
+	RequestReceived -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
+	Primary -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
+	Backup -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
+	ResponseSent -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
+	RequestSent -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
+	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
+	RequestSent -> CommitSent [ label = "EnoughPreparations" ];
+	RequestReceived -> CommitSent [ label = "EnoughPreparations" ];
+	CommitSent -> BlockSent [ label = "EnoughCommits" ];
+	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n {C := 0}" ];
 }
 ~~~~~~~~~~~~
 

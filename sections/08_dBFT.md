@@ -118,7 +118,7 @@ digraph dBFT {
   Empty -> Initial [label = "OnStart\n v := 0\n {C := 0}"];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
-	Primary -> RequestSent [ label = "FillContext\n{C >= T}", style="dashed" ];
+	Primary -> RequestSent [ label = "FillContext\n{C >= T}\n{C := 0}", style="dashed" ];
 	Backup -> RequestReceived [ label = "OnPrepareRequest" ];
 	RequestReceived -> ResponseSent [ label = "ValidBlock" ];
 	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
@@ -126,11 +126,11 @@ digraph dBFT {
 	RequestReceived -> CommitSent [ label = "EnoughPreparations" ];
 	CommitSent -> BlockSent [ label = "EnoughCommits" ];
 	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n {C := 0}" ];
-  RequestReceived -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
-  Primary -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
-	Backup -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
-	ResponseSent -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
-	RequestSent -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];  
+  RequestReceived -> ViewChanging [ label = "{C >= T exp(v+1)}\n{C := 0}", style="dashed" ];
+  Primary -> ViewChanging [ label = "{C >= T exp(v+1)}\n{C := 0}", style="dashed" ];
+	Backup -> ViewChanging [ label = "{C >= T exp(v+1)}\n{C := 0}", style="dashed" ];
+	ResponseSent -> ViewChanging [ label = "{C >= T exp(v+1)}\n{C := 0}", style="dashed" ];
+	RequestSent -> ViewChanging [ label = "{C >= T exp(v+1)}\n{C := 0}", style="dashed" ];  
 }
 ~~~~~~~~~~~~
 

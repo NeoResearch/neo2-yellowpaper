@@ -112,9 +112,11 @@ digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
         size="11";
+  Empty [ label="", width=0, height=0, style = invis ];
 	node [shape = circle]; Initial;
 	node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
+  Empty -> Initial;
 	Initial -> Primary [ label = "round-robin" ];
 	Initial -> Backup [ label = "not primary" ];
 	Primary -> RequestSent [ label = "timeout(t(H) + T)" ];

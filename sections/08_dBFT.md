@@ -106,9 +106,6 @@ The execution flow of a State Machine replica begins on the `Initial` state, for
 Given `T` as standard block time (15 seconds); `v` as current view number (starting from $v=0$); $exp(j)$ is set to $2^j$; `i` as consensus index; `R` as total number of consensus nodes.
 This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations under brackets `{}` represent time constraints (`C:=0` resets clock).
 
-Given `H`, a round-robin procedure detects if current replica is...
-
-
 ~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
@@ -121,19 +118,19 @@ digraph dBFT {
   Empty -> Initial [label = "OnStart\n v := 0\n {C := 0}"];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
-	Primary -> RequestSent [ label = "{C >= T}" ];
+	Primary -> RequestSent [ label = "FillContext\n{C >= T}", style="dashed" ];
 	Backup -> RequestReceived [ label = "OnPrepareRequest" ];
 	RequestReceived -> ResponseSent [ label = "ValidBlock" ];
-	RequestReceived -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
-	Primary -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
-	Backup -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
-	ResponseSent -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
-	RequestSent -> ViewChanging [ label = "{C >= T exp(v+1)}" ];
 	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
 	RequestSent -> CommitSent [ label = "EnoughPreparations" ];
 	RequestReceived -> CommitSent [ label = "EnoughPreparations" ];
 	CommitSent -> BlockSent [ label = "EnoughCommits" ];
 	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n {C := 0}" ];
+  RequestReceived -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
+  Primary -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
+	Backup -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
+	ResponseSent -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];
+	RequestSent -> ViewChanging [ label = "{C >= T exp(v+1)}", style="dashed" ];  
 }
 ~~~~~~~~~~~~
 
@@ -142,6 +139,8 @@ digraph dBFT {
 ![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/graphviz-dbft-sm.jpg)
 
 <!-- END COMMENT -->
+
+On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSent` after `FillContext` action (that selects transactions and creates a new proposed block) after $T$ seconds.
 
 ## Pseudocode
 

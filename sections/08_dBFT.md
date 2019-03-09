@@ -107,7 +107,7 @@ Given `T` as standard block time, currently set to $15$ seconds; `v` as current 
 Given `H`, a round-robin procedure detects if current replica is...
 
 
-~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90%}
+~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
@@ -116,7 +116,7 @@ digraph dBFT {
 	node [shape = circle]; Initial;
 	node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
-  Empty -> Initial;
+  Empty -> Initial [label = "v=0"];
 	Initial -> Primary [ label = "round-robin" ];
 	Initial -> Backup [ label = "not primary" ];
 	Primary -> RequestSent [ label = "timeout(t(H) + T)" ];
@@ -137,7 +137,7 @@ digraph dBFT {
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/4c404230c3ea695955dbb69c7e6ecc9623875dec.jpg)
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/graphviz-dbft-sm.jpg)
 
 <!-- END COMMENT -->
 

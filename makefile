@@ -1,5 +1,5 @@
 all: merge_sections
-	rm graphviz-images/*
+	rm -f graphviz-images/*
 	pandoc -F pandoc-crossref -F ./graphviz.py -F ./comments.py --pdf-engine=xelatex doc-base/metadata.yaml --template=doc-base/template.tex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -H doc-base/yellowpaperstyle.pandoc yellow_paper.md --toc -o build/yellow_paper.pdf --bibliography doc-base/references.bib
 	(cd graphviz-images && mogrify -format jpg *.pdf)
 	cp -r graphviz-images sections/

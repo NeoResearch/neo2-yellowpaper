@@ -183,10 +183,11 @@ In particular, the NEO dBFT 1.0 had a simplified implementation of the pBFT with
 
 However, it was detected that under rare situations a given node could receive the desired `M` signatures necessary for persisting a Block and, then, suddenly, lose connection with other nodes.
 In this sense, the other nodes could detect a lack of communication (along with other fails between themselves) and generate a new block.
-Besides breaking block finality \ref{subSecblockFinality}, this problem can stuck the consensus node and any client that persists the block that was not adopted by the majority of CN.
+Besides breaking block finality \ref{subSecblockFinality}, this problem could stuck the consensus node and any client that persists the block that was not adopted by the majority of CN.
 In addition, in a even more rare situation, $x$ nodes with $ f + 1 < x < M $ could receive a given block while the other nodes had a different block hash, stucking the whole network until a manual decision was reached.
 
 It is noteworthy that even in an Asynchronous Consensus without timeout mechanism this case could lead to problems if the Nonce was not yet defined as well as the transactions to be inserted inside a Block.
+This real incident motivated several novel insights on the consensus, which covered this "natural" issue due to network as well as added extra security in case of real byzantine nodes.
 
 ### Commit phase with change view blocking
 

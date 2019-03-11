@@ -218,17 +218,14 @@ In addition, it also has a local backup that restore node in some cases of hardw
 In this sense, if the node had failed and recovered its healthy it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
 Thus, it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
 
-Following this both requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover it previous state, both previously known by the network or by itself.
+Following these requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover it previous state, both previously known by the network or by itself. Thus, the recovery is currently encompassing:
 
-The recovery is all encompassing, including:
+* Replay of $ChangeView$ messages;
+* Replay of Primary $PrepareRequest$ message;
+* Replay of $PrepareResponse$ messages;
+* Replay of $Commit$ messages.
 
-* Replaying ChangeView messages
-* Replaying the PrepareRequest mesage if it was present
-* Replaying PrepareResponse messages were present.
-* Replaying the Commit messages.
-
-Some of the possible recover cases are:
-
+The code that comprises dBFT 2.0 can possible recover the following cases:
 
 * Repeatedly restoring view when no prepare request sent
   * kill off all nodes except 1 that isn't the primary; bring back up 1 node at a time while killing previously brought up node each time -- validated view is always restored on nodes
@@ -545,7 +542,8 @@ t           & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & ...\\\cline{2-10}
 \end{tabular}
 \end{minipage}
 
-
+<!--
 ## Section References
+-->
 
 &nbsp;\newline

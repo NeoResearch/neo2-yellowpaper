@@ -204,20 +204,39 @@ We defined this as the **indefatigable miners problem**, defined below:
 1. The speaker is a Geological Engineering and is searching for a place to dig for Kryptonite;
 1. He proposes a geographic location (coordinates to dig);
 1. The majority of the team ($M$) agrees with the coordinates (with their partial signatures) and signs a contract to dig;
-1. Time for digging: they will now dig until they really find Kryptonite (no other place will be accepted to be dig until Kryptonite is found). Kryptonite is an infinite divisible crystal, thus, as soon as one finds he will share the kryptonite so that everyone will have a piece for finishing their contract 3.;
-1. If one of them dies, when it resurrects it will see its previous signed agreement (3.) and it will automatically start to dig again (Regeneration strategy). The other minority will suffer the same, they will be fulfilled with hidden messages saying that they should also dig.
+1. Time for digging: they will now dig until they really find Kryptonite (no other place will be accepted to be dig until Kryptonite is found). Kryptonite is an infinite divisible crystal, thus, as soon as one finds he will share the kryptonite so that everyone will have a piece for finishing their contract (3);
+1. If one of them dies, when it resurrects it will see its previous signed agreement (3) and it will automatically start to dig again (Regeneration strategy). The other minority will suffer the same, they will be fulfilled with hidden messages saying that they should also dig.
 
 This strategy keeps the strength of the the dBFT with the limit of a maximum number of `f` faulty nodes.
 In addition, it adds robustness with a survival/regeneration strategy.
 
-
 ## Regeneration
 
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
-In this sense, if the node had failed and recovered its healthy (sending a change\_view payload) it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
-In addition, a local level of safety (which can be seen as a hardware faulty safety) should be ensured for avoiding other special attacks and possible fails.
+In addition, it also has a local backup that restore node in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential reducing the change of specific designed malicious attacks.
+
+In this sense, if the node had failed and recovered its healthy it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
+Thus, it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
 
 Following this both requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover it previous state, both previously known by the network or by itself.
+
+The recovery is all encompassing, including:
+
+* Replaying ChangeView messages
+* Replaying the PrepareRequest mesage if it was present
+* Replaying PrepareResponse messages were present.
+* Replaying the Commit messages.
+
+Some of the possible recover cases are:
+
+
+* Repeatedly restoring view when no prepare request sent
+  * kill off all nodes except 1 that isn't the primary; bring back up 1 node at a time while killing previously brought up node each time -- validated view is always restored on nodes
+* Restore the primary's view with no pepare request sent and have it generate the prepare request
+* Kill the primary after having sent the prepare request and bring him back up with only other node up and verify that the primary restores and accepts his own previously sent prepare request
+* Restore node to a view with prepare request sent, but not enough recovery messages to commit
+* Restore node to a view with prepare request sent and enough messages to commit, verify restore and commit
+* Restore node from a higher view number on it's change view to a lower number that has commit set and verify it restores to the lower view and commits
 
 
 ## Possible faults

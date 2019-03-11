@@ -102,7 +102,7 @@ dBFT states are the following:
 
 
 The first dBFT handled these states explicitly as flags (ConsensusState enum).
-However, dBFT 2.0 can infer this information in a implicit manner, since it has added state recovery mechanisms.
+However, dBFT 2.0 can infer this information in a implicit manner, since it has added a track of preparations signatures and state recovery mechanisms.
 
 ## Flowchart
 
@@ -136,7 +136,7 @@ digraph dBFT {
   Primary -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	ResponseSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
-	RequestSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];  
+	RequestSent -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
 }
 ~~~~~~~~~~~~
 
@@ -147,6 +147,7 @@ digraph dBFT {
 <!-- END COMMENT -->
 
 On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSent` after `FillContext` action (that selects transactions and creates a new proposed block) after $T$ seconds.
+`T` is currently, until version 2.0, calculated as a basin on the time that the node received last block instead of checking the timestamp in which previous header was signed.
 
 ## Pseudocode
 

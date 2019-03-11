@@ -108,40 +108,45 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 [Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
-Given `H`, a round-robin procedure detects if current replica is...
+Given `T` as standard block time (15 seconds); `v` as current view number (starting from $v=0$); $exp(j)$ is set to $2^j$; `i` as consensus index; `R` as total number of consensus nodes.
+This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations `(C condition)?` represent timed transitions (`C:=0` resets clock).
+Dashed lines represent transitions that explicitly depend on a timeout behavior and were included in a different format just for clarity.
 
-
-~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90%}
+~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
         size="11";
+  Empty [ label="", width=0, height=0, style = invis ];
 	node [shape = circle]; Initial;
 	node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
-	Initial -> Primary [ label = "round-robin" ];
-	Initial -> Backup [ label = "not primary" ];
-	Primary -> RequestSent [ label = "timeout(blockTime)" ];
-	Backup -> RequestReceived [ label = "On Prep. Request Msg" ];
-	RequestReceived -> ResponseSent [ label = "block is valid" ];
-	RequestReceived -> ViewChanging [ label = "timeout()" ];
-	Primary -> ViewChanging [ label = "timeout()" ];
-	Backup -> ViewChanging [ label = "timeout()" ];
-	ResponseSent -> ViewChanging [ label = "timeout()" ];
-	RequestSent -> ViewChanging [ label = "timeout()" ];
-	ResponseSent -> CommitSent [ label = "enough preparations" ];
-	RequestSent -> CommitSent [ label = "enough preparations" ];
-	RequestReceived -> CommitSent [ label = "enough preparations" ];
-	CommitSent -> BlockSent [ label = "enough commits" ];
-	ViewChanging -> Initial [ label = "enough view change messages" ];
+  Empty -> Initial [label = "OnStart\n v := 0\n C := 0"];
+	Initial -> Primary [ label = "(H + v) mod R = i" ];
+	Initial -> Backup [ label = "not (H + v) mod R = i" ];
+	Primary -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
+	Backup -> RequestReceived [ label = "OnPrepareRequest" ];
+	RequestReceived -> ResponseSent [ label = "ValidBlock" ];
+	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
+	RequestSent -> CommitSent [ label = "EnoughPreparations" ];
+	RequestReceived -> CommitSent [ label = "EnoughPreparations" ];
+	CommitSent -> BlockSent [ label = "EnoughCommits" ];
+	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
+  RequestReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+  Primary -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+	Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+	ResponseSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+	RequestSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];  
 }
 ~~~~~~~~~~~~
 
 <!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/a46c478b7ab8edd61f18c09392ad740e18fc32a4.jpg)
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/graphviz-dbft-sm.jpg)
 
 <!-- END COMMENT -->
+
+On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSent` after `FillContext` action (that selects transactions and creates a new proposed block) after $T$ seconds.
 
 ## Pseudocode
 

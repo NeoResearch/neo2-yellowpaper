@@ -151,11 +151,13 @@ On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0
 
 ## Pseudocode
 
+<!--
 ## Signatures sharing
 We consider that nodes can share any valid signature (invalid cases are easy to detect on Section \ref{subsecpureByzantineFault}).
 
 In this sense, we highlight here a decentralized P2P network (fully distributed), in which nodes try to inform each other as much as they can about any useful state.
 The trade-off that borders the discussions is the use bandwidth while the notorious advantage is the creation and optimization of the best communication routes between entities.
+-->
 
 ## Block finality {#subSecblockFinality}
 
@@ -164,9 +166,8 @@ Block finality in the Consensus layer level imposes the following condition pres
 $$ \forall h \in \{0,1, \cdots, t\} \Rightarrow b_t^i = b_t^j $$ {#eq:blockFinality}
 
 In summary, the block finality provides that clients do not need to verify the majority of Consensus for SMR.
-In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol.
-
-For the current NEO dBFT, the minimum number of required signatures is $M = 2f$ as defined in The Byzantine Generals Problems [@lamport1982byzantine], where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
+In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol (namely, $M = 2f+1$).
+In this sense, as already described, for the current NEO dBFT, the minimum number of required signatures is $2f+1$ as defined in The Byzantine Generals Problems [@lamport1982byzantine], where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
 
 ## Multiple block signature exposure
 

@@ -11,7 +11,7 @@ Besides its notorious advantages for real case applications, this characteristic
 
 This technical material posses the main goal of highlighting the main adaptions from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
-Fault Tolerance currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
+Fault Tolerance (dBFT) currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
 Furthermore, it describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
 While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
 The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
@@ -33,6 +33,11 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for NEO network and blockchain protocols on general.
 
 * Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
+
+In the case of NEO timeout happens following a left-shift operator that provides the view number, in the following manner:
+
+  * Considering 1 second blocks: 1 << 1 is 2; 1 << 2 is 4; 1 << 3 is 8; 1 << 4 is 16
+  * Considering 15 second blocks: 15 << 1 is 30; 15 << 2 is 60; 15 << 3 is 120; 15 << 4 is 240
 
 The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order". They also considered public-key cryptography to validate identify of replicas, which is also the same for NEO dBFT. Since algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.

@@ -192,13 +192,24 @@ This real incident motivated several novel insights on the consensus, which cove
 ### Commit phase with change view blocking
 
 Taking into account that the aforementioned faulty could happen even with the commit phase, one should verify that nodes could stuck but not double expose its signature.
-On the other hand, other attacks could happen if malicious nodes tried to save the signature and perform specific communications.
+On the other hand, other attacks could happen if malicious nodes tried to save the signature and perform some specific sets of actions, such as storing information and not sharing it.
 
 In this sense, the possibility that naturally came was:
 
-* Lock view changing ( currently implemented in the NEO dBFT) after sending your signature. This means that those who commit with that block will not sign any other proposed Block.
+* Lock view changing (currently implemented since NEO dBFT 2.0) after sending your block header signature. This means that those who are committed with that block will not sign any other proposed Block.
 
-While, on the other hand, a regeneration strategy sound compulsory to be implemented.
+On the other hand, a regeneration strategy sound compulsory to be implemented since nodes are stucked with their agreement.
+We defined this as the **indefatigable miners problem**, defined below:
+
+1. The speaker is a Geological Engineering and is searching for a place to dig for Kryptonite;
+1. He proposes a geographic location (coordinates to dig);
+1. The majority of the team ($M$) agrees with the coordinates (with their partial signatures) and signs a contract to dig;
+1. Time for digging: they will now dig until they really find Kryptonite (no other place will be accepted to be dig until Kryptonite is found). Kryptonite is an infinite divisible crystal, thus, as soon as one finds he will share the kryptonite so that everyone will have a piece for finishing their contract 3.;
+1. If one of them dies, when it resurrects it will see its previous signed agreement (3.) and it will automatically start to dig again (Regeneration strategy). The other minority will suffer the same, they will be fulfilled with hidden messages saying that they should also dig.
+
+This strategy keeps the strength of the the dBFT with the limit of a maximum number of `f` faulty nodes.
+In addition, it adds robustness with a survival/regeneration strategy.
+
 
 ## Regeneration
 

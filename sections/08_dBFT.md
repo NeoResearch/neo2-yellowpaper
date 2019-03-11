@@ -238,26 +238,24 @@ Some of the possible recover cases are:
 * Restore node to a view with prepare request sent and enough messages to commit, verify restore and commit
 * Restore node from a higher view number on it's change view to a lower number that has commit set and verify it restores to the lower view and commits
 
-
 ## Possible faults
 
 ### Pure network faults
 
 Possible scenarios:
 
-* `f` nodes will delays messages;
-* At maximum, `f` will crash both in terms of hardware fault or software problems.
+* Up to `f` nodes are going to delays messages;
+* at maximum, `f` will crash both in terms of hardware fault or software problems.
 
-### Pure byzantine faults {#subsecpureByzantineFault}
+### Mixed malicious byzantine faults {#subsecpureByzantineFault}
 
 First of all, Byzantine attacks should be designed in order that nodes will never be able to prove that it was an attack.
-
-Obviously, nodes that join a given collaborative network posses an identity or stake.
-In this sense, if anyone can detect this kind of behavior then that node will automatically be removed from the network.
+Otherwise, NEO holder would recriminate such action and vote in favor of other nodes.
+Furthermore, nodes that join a given collaborative network posses an identity or stake.
+If anyone could detect such malicious behavior, then, that node would "automatically" (through the current voting system or an automatic mechanism that could be designed) be removed from the network.
 
 * at maximum, $f$, nodes will delays messages;
-* at maximum, $f$, nodes will store messages;
-* at maximum, $f$, nodes will send wrong information;
+* at maximum, $f$, nodes will send wrong information (unlikely as it could reveal malicious behavior);
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
 
 

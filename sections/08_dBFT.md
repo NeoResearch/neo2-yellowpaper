@@ -32,12 +32,10 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for NEO network and blockchain protocols on general.
 
-* Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
+* Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely. In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
 
-In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
-
-  * Considering 15 second blocks: 15 << 1 is 30; 15 << 2 is 60; 15 << 3 is 120; 15 << 4 is 240.
-  * Considering 1 second blocks: 1 << 1 is 2; 1 << 2 is 4; 1 << 3 is 8; 1 << 4 is 16.
+  * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
+  * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
 The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order". They also considered public-key cryptography to validate identify of replicas, which is also the same for NEO dBFT. Since algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
@@ -53,19 +51,19 @@ As soon as $2f +1$ non-faulty are `prepared`, network can be considered as `comm
 
 * Every `committed` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes with become `committed`.
 
-PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from 2f+1 nodes in order to move forward (to the next operation).
+PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from $2f+1$ nodes in order to move forward (to the next operation).
 This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
-One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existance of thousands valid blocks for a same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
+One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands valid blocks for a same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
 
 ## NEO dBFT core modifications {#sec:NEOdBFT}
 
- We highlight some differences between PBFT and dBFT:
+ In summary, we highlight some differences between PBFT and dBFT:
 
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
-* Ability of proposing blocks based information sharing of block headers;
+* Ability of proposing blocks based information sharing of block headers (transactions are shared and storage in an independent syncronization mechanism);
 * Avoid double exposure of block signatures by disable change views after commitment phase;
-* Regeneration mechanism able to recover failed nodes both in local hardware and software P2P consensus layer.
+* Regeneration mechanism able to recover failed nodes both in the local hardware and in the network P2P consensus layer.
 
 
 <!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
@@ -86,11 +84,13 @@ dBFT states are the following:
 
 * Backup : true if not primary, false otherwise
 
-* RequestSent : true if block header has been proposed, false otherwise
+* ~~RequestSent : true if block header has been proposed, false otherwise~~ (removed on dBFT 2.0 since code tracks all preparation signatures, merged as RequestSentOrReceived)
 
-* RequestReceived : true if block header has been received, false otherwise
+* ~~RequestReceived : true if block header has been received, false otherwise~~ (removed on dBFT 2.0 since code tracks all preparation signatures, merged as RequestSentOrReceived)
 
 * ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
+
+* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise.
 
 * ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
 

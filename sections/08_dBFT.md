@@ -235,6 +235,30 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 * Restore node to a view with prepare request sent and enough messages to commit, verify restore and commit
 * Restore node from a higher view number on it's change view to a lower number that has commit set and verify it restores to the lower view and commits
 
+
+[Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
+
+~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
+digraph dBFT {
+  graph [bgcolor=lightgoldenrodyellow]
+        //rankdir=LR;
+        size="11";
+  Empty [ label="", width=0, height=0, style = invis ];
+	node [shape = circle]; Operational;
+	node [shape = doublecircle]; RecoverI; RecoverII; RecoverLog
+	node [shape = circle];
+  Empty -> RecoverLog [label = "OnStart\n Checking data in local db"];
+  RecoverLog -> Operational [label = "OnStart\n v := 0\n C := 0"];
+  RecoverLog -> ViewChanging [label = "OnStart\n v := 0\n C := 0"];
+	Operational -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
+	Operational -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+	RequestSent -> RecoverI [ label = "ValidBlock" ];
+	ViewChanging -> RecoverII [ label = "EnoughPreparations" ];
+  RecoverI -> Operational [ label = "Reply with valid PrepareRequest" ];
+  RecoverII -> Operational [ label = "Recover to higher view\n Recover to committed \n Provide committed signatures" ];
+}
+~~~~~~~~~~~~
+
 ## Possible faults
 
 ### Pure network faults

@@ -227,13 +227,10 @@ Following these requirements, dBFT 2.0 counted with a set of diverse cases in wh
 
 The code that comprises dBFT 2.0 can possible recover the following cases:
 
-* Repeatedly restoring view when no prepare request sent
-  * kill off all nodes except 1 that isn't the primary; bring back up 1 node at a time while killing previously brought up node each time -- validated view is always restored on nodes
-* Restore the primary's view with no pepare request sent and have it generate the prepare request
-* Kill the primary after having sent the prepare request and bring him back up with only other node up and verify that the primary restores and accepts his own previously sent prepare request
-* Restore node to a view with prepare request sent, but not enough recovery messages to commit
-* Restore node to a view with prepare request sent and enough messages to commit, verify restore and commit
-* Restore node from a higher view number on it's change view to a lower number that has commit set and verify it restores to the lower view and commits
+* Restore nodes to higher views;
+* Restore node to a view with prepare request sent, but not enough preparations to commit;
+* Restore node to a view with prepare request sent and enough preparations to commit, consequently, reaching `CommitSent` state;
+* Share commit signatures to a node that is committed (`CommitSent` flag activated).
 
 
 [Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.

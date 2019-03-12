@@ -244,18 +244,24 @@ digraph dBFT {
         //rankdir=LR;
         size="11";
   Empty [ label="", width=0, height=0, style = invis ];
-	node [shape = circle]; Operational;
-	node [shape = doublecircle]; RecoverI; RecoverII; RecoverLog
+	node [shape = circle]; Initial;
+  node [shape = doublecircle]; CommitSent;
 	node [shape = circle];
   Empty -> RecoverLog [label = "OnStart\n Checking data in local db"];
-  RecoverLog -> Operational [label = "OnStart\n v := 0\n C := 0"];
-  RecoverLog -> ViewChanging [label = "OnStart\n v := 0\n C := 0"];
-	Operational -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
-	Operational -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
-	RequestSent -> RecoverI [ label = "ValidBlock" ];
-	ViewChanging -> RecoverII [ label = "EnoughPreparations" ];
-  RecoverI -> Operational [ label = "Reply with valid PrepareRequest" ];
-  RecoverII -> Operational [ label = "Recover to higher view\n Recover to committed \n Provide committed signatures" ];
+  RecoverLog -> Initial [label = "InitializeConsensus(0)"];
+  RecoverLog -> CommitSent [label = "store has\nEnoughPreparations"];
+  RecoverLog -> ViewChanging [ label = "v := 0\n C := 0", style="dashed" ];
+	Initial -> Primary [ label = "(H + v) mod R = i" ];
+	Initial -> Backup [ label = "not (H + v) mod R = i" ];
+  Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+  Primary -> ViewChanging [label = "(C >= T exp(v+1))?\n C := 0", style="dashed"];
+	Primary -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
+  RequestSent -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
+	ViewChanging -> Recover [ label = "May trig recovers" ];
+  Recover -> Backup [ label = "If receiving nodes already have Header" ];
+  Recover -> Initial [ label = "If EnoughViewChanges\n v := v + ? \n C := 0" ];
+  Recover -> CommitSent [ label = "\nEnoughViewChanges\n v := v + ? \n C := 0\nEnoughPreparations\n Possibly some commits" ];
+  CommitSent -> Recover [ label = "Triggers recover every C >= T exp(1)) " ];
 }
 ~~~~~~~~~~~~
 

@@ -249,13 +249,14 @@ digraph dBFT {
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
   Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
   Primary -> ViewChanging [label = "(C >= T exp(v+1))?\n C := 0", style="dashed"];
-	Primary -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
-  RequestSent -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
+	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
+  RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
 	ViewChanging -> Recover [ label = "May trig recovers", style="dashed" ];
-  Recover -> Backup [ label = "If receiving nodes already have Header" ];
-  Recover -> Initial [ label = "If EnoughViewChanges\n v := v + ? \n C := 0" ];
-  Recover -> CommitSent [ label = "\nEnoughViewChanges\n v := v + ? \n C := 0\nEnoughPreparations\n Possibly some commits" ];
-  CommitSent -> Recover [ label = "Triggers recover every C >= T exp(1)) " ];
+  IsRecovering -> Backup [ label = "Preparations < M" ];
+  IsRecovering -> Initial [ label = "If EnoughViewChanges\n v := v + ? \n C := 0" ];
+  IsRecovering -> CommitSent [ label = "\nEnoughViewChanges\n v := v + ? \n C := 0\nEnoughPreparations\n Possibly some commits" ];
+  CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
+  Recover -> IsRecovering [ label = "If recover is valid for that node" ];
 }
 ~~~~~~~~~~~~
 

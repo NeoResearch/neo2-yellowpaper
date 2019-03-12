@@ -242,19 +242,22 @@ digraph dBFT {
   node [shape = doublecircle]; CommitSent;
 	node [shape = circle];
   Empty -> RecoverLog [label = "OnStart\n Checking data in local db", style="dashed"];
+  Empty -> Recover [ label = "v := 0\n C := 0", style="dashed" ];
   RecoverLog -> Initial [label = "InitializeConsensus(0)"];
   RecoverLog -> CommitSent [label = "store has\nEnoughPreparations"];
-  RecoverLog -> ViewChanging [ label = "v := 0\n C := 0", style="dashed" ];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
   Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+  Backup -> RequestSentOrReceived [ label = "OnPrepareRequest" ];
   Primary -> ViewChanging [label = "(C >= T exp(v+1))?\n C := 0", style="dashed"];
 	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
-  RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
+  RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];
+  RequestSentOrReceived -> CommitSent [ label = "ValidBlock\n EnoughPreparations" ];
 	ViewChanging -> Recover [ label = "May trig recovers", style="dashed" ];
+  ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
   IsRecovering -> Backup [ label = "Preparations < M" ];
-  IsRecovering -> Initial [ label = "If EnoughViewChanges\n v := v + ? \n C := 0" ];
-  IsRecovering -> CommitSent [ label = "\nEnoughViewChanges\n v := v + ? \n C := 0\nEnoughPreparations\n Possibly some commits" ];
+  IsRecovering -> Initial [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nPreparations < M" ];
+  IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nEnoughPreparations\n Possibly some commits" ];
   CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
   Recover -> IsRecovering [ label = "If recover is valid for that node" ];
 }

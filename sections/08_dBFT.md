@@ -233,6 +233,7 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 [Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
 Recover payloads are just sent by a maximum of $f$ nodes that received that changeview request.
 Nodes are currently selected based on the index of payload sender and local current view.
+Here, the internal state $IsRecovering$, differently than the $ResponseSent$ state, is didactically reproduced for simplifying the possible effects that a Recover message can trigger.
 
 ~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {
@@ -255,13 +256,13 @@ digraph dBFT {
 	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
   RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];
   RequestSentOrReceived -> CommitSent [ label = "ValidBlock\n EnoughPreparations" ];
-	ViewChanging -> Recover [ label = "May trig recovers", style="dashed" ];
+	ViewChanging -> Recover [ label = "Can trigger up to f\nrecovers messages", style="dashed" ];
   ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
   IsRecovering -> Backup [ label = "Preparations < M" ];
   IsRecovering -> Initial [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nPreparations < M" ];
   IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nEnoughPreparations\n Possibly some commits" ];
   CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
-  Recover -> IsRecovering [ label = "Valid recover payload" ];
+  Recover -> IsRecovering [ label = "OnRecoveryMessageReceived" ];
   CommitSent -> BlockSent [ label = "EnoughCommits" ];
 }
 ~~~~~~~~~~~~

@@ -9,7 +9,7 @@ NeoQS envisioned a cryptographic system based on Lattice problems.
 In particular, in the White Paper, a mechanism based on Shortest Vector Problem (SVP) and Closest Vector Problem (CVP)
 were considered.
 
-State-of-the-art studies and reports indicate these classes of problems @Cite-Paper-WorstCaseSVP, with specific pre-defined conditions,
+State-of-the-art studies and reports indicate these classes of problems @regev2009lattices, with specific pre-defined conditions,
 are able generate NP-Hard instances of these problems even in the worst case.
 However, some other properties were not accomplished, such as revealing parts of the secret after signing.
 Thus, for accomplishing the requirements of a complete cryptographic system, the mechanism should be able to sign $N$ messages

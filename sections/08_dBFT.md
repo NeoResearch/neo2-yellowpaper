@@ -230,7 +230,8 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 * Share commit signatures to a node that is committed (`CommitSent` flag activated).
 
 
-[Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
+[Figure @Fig:dbft-v2-recover] summarizes some of the current states led by the recover mechanisms, which is currently sent by nodes that received change view request.
+It should be noticed that OnStart event trigger a changeview at view0 in order to communicate other nodes about its initial activity and the willing to receive any recover payload.
 Recover payloads are just sent by a maximum of $f$ nodes that received that changeview request.
 Nodes are currently selected based on the index of payload sender and local current view.
 

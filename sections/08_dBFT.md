@@ -231,6 +231,8 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 
 
 [Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
+Recover payloads are just sent by a maximum of $f$ nodes that received that changeview request.
+Nodes are currently selected based on the index of payload sender and local current view.
 
 ~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {
@@ -259,10 +261,11 @@ digraph dBFT {
   IsRecovering -> Initial [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nPreparations < M" ];
   IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nEnoughPreparations\n Possibly some commits" ];
   CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
-  Recover -> IsRecovering [ label = "If recover is valid for that node" ];
+  Recover -> IsRecovering [ label = "Valid recover payload" ];
   CommitSent -> BlockSent [ label = "EnoughCommits" ];
 }
 ~~~~~~~~~~~~
+
 
 ## Possible faults
 

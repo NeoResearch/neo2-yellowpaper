@@ -90,7 +90,7 @@ dBFT states are the following:
 
 * ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
 
-* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise.
+* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced on dBFT 2.0).
 
 * ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
 
@@ -124,19 +124,17 @@ digraph dBFT {
   Empty -> Initial [label = "OnStart\n v := 0\n C := 0"];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
-	Primary -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
-	Backup -> RequestReceived [ label = "OnPrepareRequest" ];
-	RequestReceived -> ResponseSent [ label = "ValidBlock" ];
+	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
+	Backup -> RequestSentOrReceived [ label = "OnPrepareRequest" ];
+	RequestSentOrReceived -> ResponseSent [ label = "ValidBlock || IsPrimary" ];
 	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
-	RequestSent -> CommitSent [ label = "EnoughPreparations" ];
-	RequestReceived -> CommitSent [ label = "EnoughPreparations" ];
+	RequestSentOrReceived -> CommitSent [ label = "EnoughPreparations" ];
 	CommitSent -> BlockSent [ label = "EnoughCommits" ];
 	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
-  RequestReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
+  RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
   Primary -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	ResponseSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
-	RequestSent -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
 }
 ~~~~~~~~~~~~
 

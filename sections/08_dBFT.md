@@ -92,13 +92,15 @@ dBFT states are the following:
 
 * RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced on dBFT 2.0).
 
-* ResponseSent : true if block header confirmation has been sent (such block pre-confirmation was only introduced on dBFT 2.0)
+* ResponseSent : true if block header confirmation has been sent (introduced on dBFT 2.0: internal state used only for blocking node to triggering consensus OnTransaction event)
 
 * CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
 
 * BlockSent : true if block has been sent, false otherwise
 
 * ViewChanging : true if view change mechanism has been triggered, false otherwise
+
+* IsRecovering : true if a valid recovery payload was received and is being processed (introduced on dBFT 2.0: internal state)
 
 
 The first dBFT handled these states explicitly as flags (ConsensusState enum).
@@ -126,9 +128,7 @@ digraph dBFT {
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
 	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
 	Backup -> RequestSentOrReceived [ label = "OnPrepareRequest" ];
-	RequestSentOrReceived -> ResponseSent [ label = "ValidBlock || IsPrimary" ];
-	ResponseSent -> CommitSent [ label = "EnoughPreparations" ];
-	RequestSentOrReceived -> CommitSent [ label = "EnoughPreparations" ];
+	RequestSentOrReceived -> CommitSent [ label = "ValidBlock\n EnoughPreparations" ];
 	CommitSent -> BlockSent [ label = "EnoughCommits" ];
 	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
   RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
@@ -242,7 +242,7 @@ digraph dBFT {
 	node [shape = circle]; Initial;
   node [shape = doublecircle]; CommitSent;
 	node [shape = circle];
-  Empty -> RecoverLog [label = "OnStart\n Checking data in local db"];
+  Empty -> RecoverLog [label = "OnStart\n Checking data in local db", style="dashed"];
   RecoverLog -> Initial [label = "InitializeConsensus(0)"];
   RecoverLog -> CommitSent [label = "store has\nEnoughPreparations"];
   RecoverLog -> ViewChanging [ label = "v := 0\n C := 0", style="dashed" ];
@@ -252,7 +252,7 @@ digraph dBFT {
   Primary -> ViewChanging [label = "(C >= T exp(v+1))?\n C := 0", style="dashed"];
 	Primary -> RequestSent [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
   RequestSent -> ViewChanging [ label = "(C >= T exp(v+1) - T)?\n C := 0", style="dashed" ];  
-	ViewChanging -> Recover [ label = "May trig recovers" ];
+	ViewChanging -> Recover [ label = "May trig recovers", style="dashed" ];
   Recover -> Backup [ label = "If receiving nodes already have Header" ];
   Recover -> Initial [ label = "If EnoughViewChanges\n v := v + ? \n C := 0" ];
   Recover -> CommitSent [ label = "\nEnoughViewChanges\n v := v + ? \n C := 0\nEnoughPreparations\n Possibly some commits" ];

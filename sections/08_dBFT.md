@@ -222,18 +222,18 @@ Following these requirements, dBFT 2.0 counted with a set of diverse cases in wh
 * Replay of $PrepareResponse$ messages;
 * Replay of $Commit$ messages.
 
-The code that comprises dBFT 2.0 can possible recover the following cases:
+The code can possible recover the following cases:
 
 * Restore nodes to higher views;
-* Restore node to a view with prepare request sent, but not enough preparations to commit;
-* Restore node to a view with prepare request sent and enough preparations to commit, consequently, reaching `CommitSent` state;
+* Restore nodes to a view with prepare request sent, but not enough preparations to commit;
+* Restore nodes to a view with prepare request sent and enough preparations to commit, consequently, reaching `CommitSent` state;
 * Share commit signatures to a node that is committed (`CommitSent` flag activated).
 
-
 [Figure @Fig:dbft-v2-recover] summarizes some of the current states led by the recover mechanisms, which is currently sent by nodes that received change view request.
-It should be noticed that OnStart event trigger a changeview at view0 in order to communicate other nodes about its initial activity and the willing to receive any recover payload.
-Recover payloads are just sent by a maximum of $f$ nodes that received that changeview request.
+Recover payloads are just sent by a maximum of $f$ nodes that received that $ChangeView$ request.
 Nodes are currently selected based on the index of payload sender and local current view.
+It should be noticed that $OnStart$ event trigger a $ChangeView$ at view 0 in order to communicate other nodes about its initial activity and the willing to receive any recover payload.
+The idea behind this is that a node that is starting lately will probably find some advanced state already reached by the network.
 
 Here, the internal state $IsRecovering$, differently than the $ResponseSent$ state, is didactically reproduced for simplifying the possible effects that a Recover message can trigger.
 In this sense, without loss of generality, arrows that arrive on it can be directed connected with the ones that leave it.

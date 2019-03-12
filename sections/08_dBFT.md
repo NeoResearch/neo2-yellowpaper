@@ -233,7 +233,9 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 [Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
 Recover payloads are just sent by a maximum of $f$ nodes that received that changeview request.
 Nodes are currently selected based on the index of payload sender and local current view.
+
 Here, the internal state $IsRecovering$, differently than the $ResponseSent$ state, is didactically reproduced for simplifying the possible effects that a Recover message can trigger.
+In this sense, without loss of generality, arrows that arrive on it can be directed connected with the ones that leave it.
 
 ~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {

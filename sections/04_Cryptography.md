@@ -9,7 +9,8 @@ NeoQS envisioned a cryptographic system based on Lattice problems.
 In particular, in the White Paper, a mechanism based on Shortest Vector Problem (SVP) and Closest Vector Problem (CVP)
 were considered.
 
-State-of-the-art studies and reports indicate that this family of alogorithms generate Hard problems in the worst case situation.
+State-of-the-art studies and reports indicate that these class of problems @Cite-Paper-WorstCaseSVP, with specific pre-defined conditions,
+can generate NP-Hard instance of these problem even in worst case.
 On the other hand, slightly different mechanisms are being proposed, such as Learning with Errors (LWE) and its variant
 of Ring Learning with Errors (R-LWE).
 

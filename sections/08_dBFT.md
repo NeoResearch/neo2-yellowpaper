@@ -114,7 +114,7 @@ Given `T` as standard block time (15 seconds); `v` as current view number (start
 This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations `(C condition)?` represent timed transitions (`C:=0` resets clock).
 Dashed lines represent transitions that explicitly depend on a timeout behavior and were included in a different format just for clarity.
 
-~~~~ {.graphviz #fig:dbft-sm caption="dBFT State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
+~~~~ {.graphviz #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
@@ -232,14 +232,14 @@ The code that comprises dBFT 2.0 can possible recover the following cases:
 
 [Figure @Fig:dbft-v2-recover] summarizes some of the current recover mechanisms.
 
-~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
+~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
         size="11";
   Empty [ label="", width=0, height=0, style = invis ];
 	node [shape = circle]; Initial;
-  node [shape = doublecircle]; CommitSent;
+  node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
   Empty -> RecoverLog [label = "OnStart\n Checking data in local db", style="dashed"];
   Empty -> Recover [ label = "v := 0\n C := 0", style="dashed" ];
@@ -260,6 +260,7 @@ digraph dBFT {
   IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nEnoughPreparations\n Possibly some commits" ];
   CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
   Recover -> IsRecovering [ label = "If recover is valid for that node" ];
+  CommitSent -> BlockSent [ label = "EnoughCommits" ];
 }
 ~~~~~~~~~~~~
 

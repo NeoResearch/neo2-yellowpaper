@@ -134,7 +134,6 @@ digraph dBFT {
   RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
   Primary -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
-	ResponseSent -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 }
 ~~~~~~~~~~~~
 

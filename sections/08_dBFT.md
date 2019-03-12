@@ -294,7 +294,11 @@ If anyone could detect such malicious behavior, then, that node would "automatic
 
 ## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#sec:dBFT_MILP}
 
-We present a MILP model for failures and attacks on a BFT blockchain protocol.
+We present a MILP model for failures and attacks on a BFT blockchain protocol, in particular,
+the designed is focused on the specific case of the dBFT, without loss of generality for other less specialized cases.
+
+This current model is not fully completed due to the recent updates on dBFT to version 2.0.
+After being finalized it will include some benchmark result modeled with A Mathematical Programming Language (AMPL), under development at [https://github.com/NeoResearch/milp_bft_failures_attacks](https://github.com/NeoResearch/milp_bft_failures_attacks).
 
 Parameters:
 

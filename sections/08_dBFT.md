@@ -2,8 +2,8 @@
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
-Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applicable in a live Smart Contract (SC) Scenario with multiple distinct decentralized applications.
-It should be noted that append storage applications pose different challenges when compared to the needs of SC transaction persisting, which involves State Machine Replication [@schneider1990implementing].
+Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with multiple distinct decentralized applications.
+It is noteworthy that append storage applications pose different challenges when compared to the needs of SC transaction persisting, which involves State Machine Replication [@schneider1990implementing].
 In addition, a second important fact to be considered is related to the finality of appending information to the ledger.
 Final users, merchants, and exchanges want to precisely know if their transaction was definitively processed or if it could still be reverted.
 Differently than most parts of previous works in the literature, NEO blockchain proposed a Consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].

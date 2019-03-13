@@ -301,6 +301,8 @@ the designed is focused on the specific case of the dBFT, without loss of genera
 This current model is not fully completed due to the recent updates on dBFT to version 2.0.
 After being finalized it will include some benchmark result modeled with A Mathematical Programming Language (AMPL), under development at [https://github.com/NeoResearch/milp_bft_failures_attacks](https://github.com/NeoResearch/milp_bft_failures_attacks).
 
+### Mathematical model
+
 Parameters:
 
 $i \in R$
@@ -515,7 +517,7 @@ Block relay constraints:
 \end{align}
 
 
-## Example
+### Example
 
 &nbsp;\newline
 

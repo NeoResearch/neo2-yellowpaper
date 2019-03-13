@@ -22,4 +22,9 @@ link-citations: true
 cref : true
 linkReferences: true
 nameInLink: true
+toc-own-page: true
+titlepage: true
+titlepage-rule-color: "00cb00"
+logo: "doc-base/neo.png"
+logo-width: 50
 ...

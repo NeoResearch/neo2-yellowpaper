@@ -61,7 +61,7 @@ One difference is that, for PBFT, clients submit atomic and independent operatio
 
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
-* Ability of proposing blocks based information sharing of block headers (transactions are shared and storage in an independent syncronization mechanism);
+* Ability to propose blocks based on information shared through block headers (transactions are shared and stored in an independent syncronization mechanism);
 * Avoid double exposure of block signatures by disable change views after commitment phase;
 * Regeneration mechanism able to recover failed nodes both, in the local hardware and in the network P2P consensus layer.
 
@@ -144,7 +144,7 @@ digraph dBFT {
 <!-- END COMMENT -->
 
 On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSent` after `FillContext` action (that selects transactions and creates a new proposed block) after $T$ seconds.
-`T` is currently, until version 2.0, calculated as a basin on the time that the node received last block instead of checking the timestamp in which previous header was signed.
+`T` is currently, until version 2.0, calculated based on the time that the node received last block instead of checking the timestamp in which the previous header was signed.
 
 ## Pseudocode
 
@@ -198,10 +198,10 @@ In this sense, the possibility that naturally came was:
 On the other hand, a regeneration strategy sounded compulsory to be implemented since nodes are stuck with their agreement.
 We defined this as the **indefatigable miners problem**, defined below:
 
-1. The speaker is a Geological Engineering and is searching for a place to dig for Kryptonite;
+1. The speaker is a Geological Engineer and is searching for a place to dig for Kryptonite;
 1. He proposes a geographic location (coordinates to dig);
-1. The majority of the team ($M$) agrees with the coordinates (with their partial signatures) and signs a contract to dig;
-1. Time for digging: they will now dig until they really find Kryptonite (no other place will be accepted to be dig until Kryptonite is found). Kryptonite is an infinite divisible crystal, thus, as soon as one finds he will share the kryptonite so that everyone will have a piece for finishing their contract (3);
+1. The majority of the team ($M$) agrees with the coordinates (with their partial signatures) and sign a contract to dig;
+1. Time for digging: they will now dig until they really find Kryptonite (no other place will be accepted to be dug until Kryptonite is found). Kryptonite is an infinitely divisible crystal, thus, as soon as one finds it he will share the Kryptonite so that everyone will have a piece for finishing their contract (3);
 1. If one of them dies, when it resurrects it will see its previous signed agreement (3) and it will automatically start to dig again (Regeneration strategy). The other minority will suffer the same, they will be fulfilled with hidden messages saying that they should also dig.
 
 This strategy keeps the strength of the the dBFT with the limit of a maximum number of `f` faulty nodes.
@@ -210,7 +210,7 @@ In addition, it adds robustness with a survival/regeneration strategy.
 ## Regeneration
 
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
-In addition, it also has a local backup that restores nodes in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the change of specifically designed malicious attacks.
+In addition, it also has a local backup that restores nodes in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the chance of specifically designed malicious attacks.
 
 In this sense, if the node had failed and recovered its health, it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
 Thus, it might receive a payload that provides it the ability to check the agreements of the majority and come back to real operation, helping them to sign the current block being processed.
@@ -222,11 +222,11 @@ Following these requirements, dBFT 2.0 counted with a set of diverse cases in wh
 * Replay of $PrepareResponse$ messages;
 * Replay of $Commit$ messages.
 
-The code can possible recover the following cases:
+The code can possibly recover the following cases:
 
 * Restore nodes to higher views;
 * Restore nodes to a view with prepare request sent, but not enough preparations to commit;
-* Restore nodes to a view with prepare request sent and enough preparations to commit, consequently, reaching `CommitSent` state;
+* Restore nodes to a view with prepare request sent and enough preparations to commit, consequently reaching `CommitSent` state;
 * Share commit signatures to a node that is committed (`CommitSent` flag activated).
 
 [Figure @Fig:dbft-v2-recover] summarizes some of the current states led by the recovery mechanisms, which is currently sent by nodes that received a change view request.

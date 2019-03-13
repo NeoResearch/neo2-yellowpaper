@@ -2,25 +2,25 @@
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
-Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applied in a live Smart Contract (SC) Scenario with plenty of distinct decentralized applications.
-It is noteworthy that append storage applications poses different level of challenges compared to the current need of SC transactions persisting, which involve State Machine Replication [@schneider1990implementing].
-In addition, a second important fact to be considered is related to the finality in appending information to the ledger.
-Final users, merchants and exchanges want to precisely know if their transaction was definitively processed or still could be reverted.
-Differently than most part of previous works in the literature, NEO blockchain proposed a Consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
-Besides its notorious advantages for real case applications, this characteristic imposes some constraints, also additional vulnerabilities and challenges.
+Various studies in the literature dealt with partially synchronous and fully asynchronous Byzantine Fault Tolerant systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey], but few of them were really applicable in a live Smart Contract (SC) Scenario with multiple distinct decentralized applications.
+It should be noted that append storage applications pose different challenges when compared to the needs of SC transaction persisting, which involves State Machine Replication [@schneider1990implementing].
+In addition, a second important fact to be considered is related to the finality of appending information to the ledger.
+Final users, merchants, and exchanges want to precisely know if their transaction was definitively processed or if it could still be reverted.
+Differently than most parts of previous works in the literature, NEO blockchain proposed a Consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
+Besides its notorious advantages for real case applications, this characteristic imposes some additional constraints, vulnerabilities and challenges.
 
-This technical material posses the main goal of highlighting the main adaptions from the classical Practical
+The goal of this technical material is to highlight the main adaptions from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
 Fault Tolerance (dBFT) currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
-Furthermore, it describes a novel mathematical model able to verify specific consensus behavior by means of a discrete model which can simulate real cases operation.
+Furthermore, it describes a novel mathematical model that is able to verify specific consensus behavior by means of a discrete model which can simulate its operation in real cases.
 While highlighting the positive aspects of the current NEO consensus system,  this document also has the goal of pointing out possible faults and future research & development directions.
-The latter can be achieved by a combination of NEO's requirement and novel ideas in connection with well-known studies from the literature.
+The latter can be achieved by a combination of NEO's requirements and novel ideas in connection with well-known studies from the literature.
 
 The remainder of this document is organized as follows.
-[Section @Sec:Background] provides a brief background on the the classical PBFT.
+[Section @Sec:Background] provides a brief background on the classical PBFT.
 [Section @Sec:NEOdBFT] describes the key modification made from the literature for the achievement of NEO's dBFT.
-[Section @Sec:dBFTDetails] details the current state-of-the-art of the NEO dBFT ongoing discussions, presenting didactic pseudocodes and flowcharts.
-Finally, [Section @Sec:dBFT_MILP] proposes a novel mathematical programming model based on Linear Integer Programming, that models an optimal adversary that will challenge network and verify its limitations on worst case scenarios.
+[Section @Sec:dBFTDetails] details the current state-of-the-art discussions regarding NEO's dBFT, and presents didactic pseudocodes and flowcharts.
+Finally, [Section @Sec:dBFT_MILP] proposes a novel mathematical programming model based on Linear Integer Programming, which models an optimal adversary that will challenge the network and verify its limitations in worst case scenarios.
 
 ## Background on Practical BFT {#sec:Background}
 
@@ -28,16 +28,16 @@ Practical BFT was first made possible by the work of Miguel Castro and Barbara L
 
 ![Turing-Prize winner Barbara Liskov on 2010. Wikipedia CC BY-SA 3.0\label{fig:bliskov}](images/Barbara_Liskov_MIT_computer_scientist_2010_wikipedia_CC_BY-SA_3.0.jpg){height=200px}
 
-Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup nodes, the proposed algorithm guarantees _liveness_ and _safety_ to the network, if at most $f$ nodes are faulty/byzantine^[The name Byzantine refers to arbitrary behavior, and was coined by Leslie Lamport and others on paper "The Byzantine Generals Problem"].
+Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup nodes, the proposed algorithm guarantees _liveness_ and _safety_ to the network, if at most $f$ nodes are faulty/Byzantine^[The name Byzantine refers to arbitrary behavior, and was coined by Leslie Lamport and others in the paper "The Byzantine Generals Problem"].
 
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for NEO network and blockchain protocols on general.
 
-* Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", that allows Backup nodes to switch Primary node when it seems byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely. In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
+* Liveness guarantees that network won't be stopped (unless more than $f$ byzantine nodes), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine. A timeout mechanism is used, and by doubling delays exponentially at every view, PBFT can prevent attacks from malicious network delays that cannot grow indefinitely. In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
 
   * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
   * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
-The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order". They also considered public-key cryptography to validate identify of replicas, which is also the same for NEO dBFT. Since algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
+The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT. Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
 
 PBFT correctness is guaranteed by having three different phases: pre-prepare, prepare and commit^[NEO dBFT 2.0 also consists of three phases, with a slight naming change: prepare request, prepare response, and commit].
@@ -45,15 +45,15 @@ PBFT correctness is guaranteed by having three different phases: pre-prepare, pr
 * On pre-prepare, primary sends a sequence number $k$ together with message $m$ and signed digest $d$.
 Backup $i$ accept pre-prepare if signature is correct, $k$ is in valid interval^[A special technique avoids the exhaustion of sequence number space by faulty primary], and $i$ has not yet accepted a pre-prepare for same $k$ and same view.
 
-* When pre-prepare is accepted, a prepare message is broadcast (including to primary), and node is considered `prepared` when it receives at least $2f$ prepare messages that match its local pre-prepare, for the same view.
+* When pre-prepare is accepted, a prepare message is broadcast (including to primary), and a node is considered `prepared` when it receives at least $2f$ prepare messages that match its local pre-prepare, for the same view.
 So, at this point, for a given view, the non-faulty replicas already agree on total order for requests.
-As soon as $2f +1$ non-faulty are `prepared`, network can be considered as `committed`.
+As soon as $2f +1$ non-faulty nodes are `prepared`, the network can be considered as `committed`.
 
-* Every `committed` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes with become `committed`.
+* Every `committed` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes will become `committed`.
 
 PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from $2f+1$ nodes in order to move forward (to the next operation).
 This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
-One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands valid blocks for a same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
+One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands of valid blocks for the same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
 
 ## NEO dBFT core modifications {#sec:NEOdBFT}
 
@@ -63,7 +63,7 @@ One difference is that, for PBFT, clients submit atomic and independent operatio
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
 * Ability of proposing blocks based information sharing of block headers (transactions are shared and storage in an independent syncronization mechanism);
 * Avoid double exposure of block signatures by disable change views after commitment phase;
-* Regeneration mechanism able to recover failed nodes both in the local hardware and in the network P2P consensus layer.
+* Regeneration mechanism able to recover failed nodes both, in the local hardware and in the network P2P consensus layer.
 
 
 <!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
@@ -108,11 +108,11 @@ However, dBFT 2.0 can infer this information in a implicit manner, since it has 
 
 ## Flowchart
 
-[Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonims on this subsection).
+[Figure @Fig:dbft-sm] presents the State Machine replicated on each consensus node (the term _replica_ or _node_ or _consensus node_ may be considered synonyms for this subsection).
 The execution flow of a State Machine replica begins on the `Initial` state, for a given block height `H` on the blockchain.
 Given `T` as standard block time (15 seconds); `v` as current view number (starting from $v=0$); $exp(j)$ is set to $2^j$; `i` as consensus index; `R` as total number of consensus nodes.
 This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations `(C condition)?` represent timed transitions (`C:=0` resets clock).
-Dashed lines represent transitions that explicitly depend on a timeout behavior and were included in a different format just for clarity.
+Dashed lines represent transitions that explicitly depend on a timeout behavior and were included in a different format for clarity.
 
 ~~~~ {.graphviz #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
@@ -163,8 +163,8 @@ Block finality in the Consensus layer level imposes the following condition pres
 $$ \forall h \in \{0,1, \cdots, t\} \Rightarrow b_t^i = b_t^j $$ {#eq:blockFinality}
 
 In summary, the block finality provides that clients do not need to verify the majority of Consensus for SMR.
-In this sense, seed nodes can just append all blocks that posses the number of authentic signatures defined by the protocol (namely, $M = 2f+1$).
-In this sense, as already described, for the current NEO dBFT, the minimum number of required signatures is $2f+1$ as defined in The Byzantine Generals Problems [@lamport1982byzantine], where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
+In this sense, seed nodes can just append all blocks that possess the number of authentic signatures defined by the protocol (namely, $M = 2f+1$).
+In this sense, as already described for the current NEO dBFT, the minimum number of required signatures is $2f+1$ as defined in The Byzantine Generals Problems [@lamport1982byzantine], where $f = \frac{1}{3} \times N$ is the maximum number of Byzantine nodes allowed by the network protocol.
 
 ## Multiple block signature exposure
 
@@ -178,24 +178,24 @@ In particular, this happens due to two components of the Blocks that are selecte
 
 In particular, the NEO dBFT 1.0 had a simplified implementation of the pBFT without the commit stage.
 
-However, it was detected that under rare situations a given node could receive the desired `M` signatures necessary for persisting a Block and, then, suddenly, lose connection with other nodes.
+However, it was detected that under rare situations a given node could receive the desired `M` signatures necessary for persisting a Block, and then suddenly lose connection with other nodes.
 In this sense, the other nodes could detect a lack of communication (along with other fails between themselves) and generate a new block.
-Besides breaking block finality \ref{subSecblockFinality}, this problem could stuck the consensus node and any client that persists the block that was not adopted by the majority of CN.
-In addition, in a even more rare situation, $x$ nodes with $ f + 1 < x < M $ could receive a given block while the other nodes had a different block hash, stucking the whole network until a manual decision was reached.
+Besides breaking block finality \ref{subSecblockFinality}, this problem could halt the consensus node and any client that persists the block that was not adopted by the majority of CN.
+In addition, in a even more rare situation, $x$ nodes with $ f + 1 < x < M $ could receive a given block while the other nodes had a different block hash, halting the whole network until a manual decision was reached.
 
 It is noteworthy that even in an Asynchronous Consensus without timeout mechanism this case could lead to problems if the Nonce was not yet defined as well as the transactions to be inserted inside a Block.
-This real incident motivated several novel insights on the consensus, which covered this "natural" issue due to network as well as added extra security in case of real byzantine nodes.
+This real incident motivated several novel insights on the consensus, which covered this "natural" issue due to network as well as added extra security in case of real Byzantine nodes.
 
 ### Commit phase with change view blocking
 
-Taking into account that the aforementioned faulty could happen even with the commit phase, one should verify that nodes could stuck but not double expose its signature.
+Taking into account that the aforementioned fault could happen even with the commit phase, one should verify that nodes could become stuck but not double expose its signature.
 On the other hand, other attacks could happen if malicious nodes tried to save the signature and perform some specific sets of actions, such as storing information and not sharing it.
 
 In this sense, the possibility that naturally came was:
 
-* Lock view changing (currently implemented since NEO dBFT 2.0) after sending your block header signature. This means that those who are committed with that block will not sign any other proposed Block.
+* Lock view changing (currently implemented since NEO dBFT 2.0) after sending the block header signature. This means that those who are committed with that block will not sign any other proposed Block.
 
-On the other hand, a regeneration strategy sound compulsory to be implemented since nodes are stucked with their agreement.
+On the other hand, a regeneration strategy sounded compulsory to be implemented since nodes are stuck with their agreement.
 We defined this as the **indefatigable miners problem**, defined below:
 
 1. The speaker is a Geological Engineering and is searching for a place to dig for Kryptonite;
@@ -210,12 +210,12 @@ In addition, it adds robustness with a survival/regeneration strategy.
 ## Regeneration
 
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
-In addition, it also has a local backup that restore node in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential reducing the change of specific designed malicious attacks.
+In addition, it also has a local backup that restores nodes in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the change of specifically designed malicious attacks.
 
-In this sense, if the node had failed and recovered its healthy it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
-Thus, it might receive a payload that provides it the ability to check agreements of the majority and come back to real operation, helping them to sign the current block being processed.
+In this sense, if the node had failed and recovered its health, it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
+Thus, it might receive a payload that provides it the ability to check the agreements of the majority and come back to real operation, helping them to sign the current block being processed.
 
-Following these requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover it previous state, both previously known by the network or by itself. Thus, the recovery is currently encompassing:
+Following these requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover its previous state, both previously known by the network or by itself. Thus, the recovery is currently encompassing:
 
 * Replay of $ChangeView$ messages;
 * Replay of Primary $PrepareRequest$ message;
@@ -229,14 +229,14 @@ The code can possible recover the following cases:
 * Restore nodes to a view with prepare request sent and enough preparations to commit, consequently, reaching `CommitSent` state;
 * Share commit signatures to a node that is committed (`CommitSent` flag activated).
 
-[Figure @Fig:dbft-v2-recover] summarizes some of the current states led by the recover mechanisms, which is currently sent by nodes that received change view request.
-Recover payloads are just sent by a maximum of $f$ nodes that received that $ChangeView$ request.
+[Figure @Fig:dbft-v2-recover] summarizes some of the current states led by the recovery mechanisms, which is currently sent by nodes that received a change view request.
+Recover payloads are sent by a maximum of $f$ nodes that received the $ChangeView$ request.
 Nodes are currently selected based on the index of payload sender and local current view.
-It should be noticed that $OnStart$ event trigger a $ChangeView$ at view 0 in order to communicate other nodes about its initial activity and the willing to receive any recover payload.
-The idea behind this is that a node that is starting lately will probably find some advanced state already reached by the network.
+It should be noticed that $OnStart$ events trigger a $ChangeView$ at view 0 in order to communicate to other nodes about its initial activity and its willingness to receive any Recover payload.
+The idea behind this is that a node that is starting late will probably find some advanced state already reached by the network.
 
 Here, the internal state $IsRecovering$, differently than the $ResponseSent$ state, is didactically reproduced for simplifying the possible effects that a Recover message can trigger.
-In this sense, without loss of generality, arrows that arrive on it can be directed connected with the ones that leave it.
+In this sense, without loss of generality, arrows that arrive on it can be directly connected with the ones that leave it.
 
 ~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {
@@ -274,8 +274,6 @@ digraph dBFT {
 
 ## Possible faults
 
-This section clarifies the possible common problem and malicious attacks that dBFT can expect.
-
 ### Pure network faults
 
 Possible scenarios:
@@ -283,27 +281,25 @@ Possible scenarios:
 * Up to `f` nodes are going to delays messages;
 * at maximum, `f` will crash both in terms of hardware fault or software problems.
 
-### Mixed malicious byzantine faults {#subsecpureByzantineFault}
+### Mixed malicious Byzantine faults {#subsecpureByzantineFault}
 
 First of all, Byzantine attacks should be designed in order that nodes will never be able to prove that it was an attack.
-Otherwise, NEO holder would recriminate such action and vote in favor of other nodes.
-Furthermore, nodes that join a given collaborative network posses an identity or stake.
+Otherwise, NEO holder would recriminate such actions and vote in favor of other nodes.
+Furthermore, nodes that join a given collaborative network possess an identity or stake.
 If anyone could detect such malicious behavior, then, that node would "automatically" (through the current voting system or an automatic mechanism that could be designed) be removed from the network.
 
 * at maximum, $f$, nodes will delays messages;
-* at maximum, $f$, nodes will send wrong information (unlikely as it could reveal malicious behavior);
+* at maximum, $f$, nodes will send incorrect information (unlikely as it could reveal malicious behavior);
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
 
 
 ## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#sec:dBFT_MILP}
 
 We present a MILP model for failures and attacks on a BFT blockchain protocol, in particular,
-the designed is focused on the specific case of the dBFT, without loss of generality for other less specialized cases.
+the design is focused on the specific case of dBFT, without loss of generality for other less specialized cases.
 
 This current model is not fully completed due to the recent updates on dBFT to version 2.0.
-After being finalized it will include some benchmark result modeled with A Mathematical Programming Language (AMPL), under development at [https://github.com/NeoResearch/milp_bft_failures_attacks](https://github.com/NeoResearch/milp_bft_failures_attacks).
-
-### Mathematical model
+After being finalized it will include some benchmark results modeled with A Mathematical Programming Language (AMPL), currently under development at [https://github.com/NeoResearch/milp_bft_failures_attacks](https://github.com/NeoResearch/milp_bft_failures_attacks).
 
 Parameters:
 
@@ -519,7 +515,7 @@ Block relay constraints:
 \end{align}
 
 
-### Example
+## Example
 
 &nbsp;\newline
 

@@ -301,6 +301,8 @@ the design is focused on the specific case of dBFT, without loss of generality f
 This current model is not fully completed due to the recent updates on dBFT to version 2.0.
 After being finalized it will include some benchmark results modeled with A Mathematical Programming Language (AMPL), currently under development at [https://github.com/NeoResearch/milp_bft_failures_attacks](https://github.com/NeoResearch/milp_bft_failures_attacks).
 
+### Mathematical model
+
 Parameters:
 
 $i \in R$

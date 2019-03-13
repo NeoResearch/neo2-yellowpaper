@@ -274,6 +274,8 @@ digraph dBFT {
 
 ## Possible faults
 
+This section clarifies the possible common problem and malicious attacks that dBFT can expect.
+
 ### Pure network faults
 
 Possible scenarios:

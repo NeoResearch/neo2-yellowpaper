@@ -247,8 +247,9 @@ digraph dBFT {
 	node [shape = circle]; Initial;
   node [shape = doublecircle]; BlockSent;
 	node [shape = circle];
-  Empty -> RecoverLog [label = "OnStart\n Checking data in local db", style="dashed"];
-  Empty -> Recover [ label = "v := 0\n C := 0", style="dashed" ];
+  Empty -> Initialize [ ]
+  Initialize -> RecoverLog [label = "OnStart\n Checking data in local db", style="dashed"];
+  Initialize -> Recover [ label = "v := 0\n C := 0", style="dashed" ];
   RecoverLog -> Initial [label = "InitializeConsensus(0)"];
   RecoverLog -> CommitSent [label = "store has\nEnoughPreparations"];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];

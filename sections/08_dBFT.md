@@ -113,6 +113,16 @@ The execution flow of a State Machine replica begins on the `Initial` state, for
 Given `T` as standard block time (15 seconds); `v` as current view number (starting from $v=0$); $exp(j)$ is set to $2^j$; `i` as consensus index; `R` as total number of consensus nodes.
 This State Machine can be represented as a Timed Automata [@AlurDill:1994], where `C` represents the clock variable and operations `(C condition)?` represent timed transitions (`C:=0` resets clock).
 Dashed lines represent transitions that explicitly depend on a timeout behavior and were included in a different format for clarity.
+It is also assumed that transitions are processed *in the order* they are presented. For example:
+
+```
+ (C >= 5)?
+ A
+ (C >= 7)?
+ B
+```
+
+This block would first wait until clock `C` has over 5 seconds, then process `A`, then check clock to meet 7 seconds, and then process `B`. This allows a more precise description of the actual dBFT 2.0 implementation.
 
 ~~~~ {.graphviz #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
@@ -126,9 +136,9 @@ digraph dBFT {
   Empty -> Initial [label = "OnStart\n v := 0\n C := 0"];
 	Initial -> Primary [ label = "(H + v) mod R = i" ];
 	Initial -> Backup [ label = "not (H + v) mod R = i" ];
-	Primary -> RequestSentOrReceived [ label = "FillContext\n (C >= T)?\nC := 0", style="dashed" ];
-	Backup -> RequestSentOrReceived [ label = "OnPrepareRequest" ];
-	RequestSentOrReceived -> CommitSent [ label = "ValidBlock\n EnoughPreparations" ];
+	Primary -> RequestSentOrReceived [ label = "(C >= T)? \n SendPrepareRequest \n C := 0", style="dashed" ];
+	Backup -> RequestSentOrReceived [ label = "OnPrepareRequest \n ValidBlock" ];
+	RequestSentOrReceived -> CommitSent [ label = "EnoughPreparations" ];
 	CommitSent -> BlockSent [ label = "EnoughCommits" ];
 	ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
   RequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
@@ -143,10 +153,14 @@ digraph dBFT {
 
 <!-- END COMMENT -->
 
-On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSent` after `FillContext` action (that selects transactions and creates a new proposed block) after $T$ seconds.
-`T` is currently, until version 2.0, calculated based on the time that the node received last block instead of checking the timestamp in which the previous header was signed.
+On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). If node is Primary, it may proceed to `RequestSentOrReceived` after `SendPrepareRequest` action (that selects transactions and creates a new proposed block) after $T$ seconds. If node is Backup, it needs to wait for a `OnPrepareRequest` action.
+After clocks expire, nodes may enter a `ViewChanging` state, what guarantees *liveness* to the network in case of failed Primary. However, CommitSet state guarantees that no view change occurs, as the node is already *committed* to that specific block (so it won't provide signature to any other block on that height). Since this could compromise the liveness of the network, a Recovery process was proposed (see [Figure @Fig:dbft-v2-recover]).
+`EnoughPreparations`, `EnoughCommits` and `EnoughViewChanges` depend on having enough valid responses that surpass the byzantine level $M$ (thus, respecting maximum number of faulty nodes $f$).
+`T` is currently, until version 2.0, calculated as a basin on the time that the node received last block instead of checking the timestamp in which previous header was signed.
 
+<!-- not necessary for now
 ## Pseudocode
+-->
 
 <!--
 ## Signatures sharing
@@ -212,7 +226,7 @@ In addition, it adds robustness with a survival/regeneration strategy.
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
 In addition, it also has a local backup that restores nodes in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the chance of specifically designed malicious attacks.
 
-In this sense, if the node had failed and recovered its health, it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
+In this sense, if the node had failed and recovered its health, it automatically sends a $change\_view$ to $0$, which means that that node is back and wants to hear the history from the others.
 Thus, it might receive a payload that provides it the ability to check the agreements of the majority and come back to real operation, helping them to sign the current block being processed.
 
 Following these requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover its previous state, both previously known by the network or by itself. Thus, the recovery is currently encompassing:
@@ -590,3 +604,9 @@ t           & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & ...\\\cline{2-10}
 -->
 
 &nbsp;\newline
+
+## Acknowledgements
+
+The key ideas and development behind dBFT 2.0 were mainly guided by Erik Zhang, in open GitHub discussions, and also valuable contributions from community members who took their precious time to discuss BFT ideas and to propose improvements.
+We are also grateful to developers that managed to turn this into reality, by constantly solving challenging problems.
+For this, a special thanks to those who helped this become reality: jsolman, shargon, longfei, tog, edge, and many others ^[sorry if we forget important names here, this is an open document and we will fix this as soon as possible :)].

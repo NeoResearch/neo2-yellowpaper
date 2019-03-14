@@ -58,6 +58,8 @@ This repository is currently MIT Licensed (for text and code), and Free Culture 
 Please, when contributing, be careful to only add figures covered by Creative Commons licenses, and give proper references to original sources.
 When adding new original material to this project, contributor agrees that it will be covered by Free Culture license Creative Commons [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
+The beautiful Pandoc/LaTeX template [Eisvogel](https://github.com/Wandmalfarbe/pandoc-latex-template/) is licensed by BSD 3-Clause License.
+
 Copyleft 2018-2019
 
 From Neo Community to You

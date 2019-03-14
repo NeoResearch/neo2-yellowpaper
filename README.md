@@ -37,7 +37,7 @@ After pandoc and LaTeX base are available, you can simply run `make`, which will
 
 ### building specific section
 Any section can be build using command `make section` and passing `SECTION` parameter.
-For example: `make section SECTION=08_dBFT` will build section 08.
+For example: `make section SECTION=08_dBFT` will build section 08 (it will be stored on `build/08_dBFT.pdf`).
 
 ## automatically building using docker
 The easiest way to build is by using docker.

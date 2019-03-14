@@ -62,7 +62,7 @@ One difference is that, for PBFT, clients submit atomic and independent operatio
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
 * Ability to propose blocks based on information shared through block headers (transactions are shared and stored in an independent syncronization mechanism);
-* Avoid double exposure of block signatures by disable change views after commitment phase;
+* Avoid double exposure of block signatures by not allowing view changes after the commitment phase;
 * Regeneration mechanism able to recover failed nodes both, in the local hardware and in the network P2P consensus layer.
 
 

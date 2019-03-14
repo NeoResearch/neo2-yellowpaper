@@ -226,7 +226,7 @@ In addition, it adds robustness with a survival/regeneration strategy.
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
 In addition, it also has a local backup that restores nodes in some cases of hardware failure. This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the change of specifically designed malicious attacks.
 
-In this sense, if the node had failed and recovered its health, it automatically sends a $change_view$ to $0$, which means that that node is back and wants to hear the history from the others.
+In this sense, if the node had failed and recovered its health, it automatically sends a $change\_view$ to $0$, which means that that node is back and wants to hear the history from the others.
 Thus, it might receive a payload that provides it the ability to check the agreements of the majority and come back to real operation, helping them to sign the current block being processed.
 
 Following these requirements, dBFT 2.0 counted with a set of diverse cases in which a node could recover its previous state, both previously known by the network or by itself. Thus, the recovery is currently encompassing:

@@ -538,8 +538,11 @@ $endif$
 % font family to Source Sans Pro, not \sfdefault.
 %
 
-% TODO DELETING sourcesanspro until latex extra fonts not installed
-
+$if(mainfont)$
+$else$
+\usepackage[default]{sourcesanspro}
+\usepackage{sourcecodepro}
+$endif$
 
 %
 % heading color

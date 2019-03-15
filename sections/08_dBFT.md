@@ -412,7 +412,6 @@ $recvdPrepResp^{t}_{i, j, h, b, v}$
 $sentBlkPersist^{t}_{i, h, b}$
 
 : binary variable that indicates if replica $i \in R$ has sent (in past) to all replicas a Block Relay message at height $h$, on time $t$, for proposed block $b$. Once set to ONE this is carried forever as ONE.
-% Nao se assumi que um byzantine poderia dar dois relays diferentes em views distintos?
 
 $recvdBlkPersist^{t}_{i, j, h, b}$
 

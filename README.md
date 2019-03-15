@@ -23,7 +23,7 @@ Current draft proposal includes 11 sections + references (this may be changed by
 - [05_Assets.md](sections/05_Assets.md) : expected release date -> Q2+ 2019
 - [06_Transactions.md](sections/06_Transactions.md) : expected release date -> Q2+ 2019
 - [07_NeoVM_NeoContract.md](sections/07_NeoVM_NeoContract.md) : expected release date -> Q2 2019
-- [08_dBFT.md](sections/08_dBFT.md) : [Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives](releases/08_dBFT.pdf) - first released 14 March, 2019
+- [08_dBFT.md](sections/08_dBFT.md) : first released 14 March, 2019. **PDF:** [Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives](releases/08_dBFT.pdf)
 - [09_SmartEconomy.md](sections/09_SmartEconomy.md) : expected release date -> Q2+ 2019
 - [10_IoT.md](sections/10_IoT.md) : expected release date -> Q2+ 2019
 - [11_Advanced_Contracts.md](sections/11_Advanced_Contracts.md) : expected release date -> Q2+ 2019

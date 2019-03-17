@@ -285,6 +285,11 @@ digraph dBFT {
 }
 ~~~~~~~~~~~~
 
+<!-- BEGIN COMMENT -->
+
+![dBFT State Machine for specific block height\label{fig:dbft-v2-recover}](graphviz-images/graphviz-dbft-v2-recover.jpg)
+
+<!-- END COMMENT -->
 
 ## Possible faults
 

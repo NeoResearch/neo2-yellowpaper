@@ -17,7 +17,7 @@ Yellow Paper sections are separated on `sections/` folder (these are used as sou
 
 Current draft proposal includes 11 sections + references (this may be changed by community, as anything else!):
 - [01_Introduction.md](sections/01_Introduction.md) : expected release date -> Q2 2019
-- [02_Blockchain_Networks.md](sections/02_Blockchain_Networks.md) : expected release date -> Q2+ 2019
+- [02_Network.md](sections/02_Network.md) : expected release date -> Q2+ 2019
 - [03_Numbers.md](sections/03_Numbers.md) : expected release date -> Q2 2019
 - [04_Cryptography.md](sections/04_Cryptography.md) : expected release date -> Q2 2019
 - [05_Assets.md](sections/05_Assets.md) : expected release date -> Q2+ 2019

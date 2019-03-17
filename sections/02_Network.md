@@ -2,6 +2,9 @@
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper](https://github.com/neoresearch/yellowpaper) repository] initiative, a community-driven technical specification for Neo blockchain._
 
+**WARNING:** this section is an **unreleased draft**.
+It is expected to be incomplete or even to carry incorrect information, so feel free to contribute with us!
+
 ## Blockchain Networks: nodes and wallets
 
 A Blockchain can be seen and defined differently, depending on the interests around it.

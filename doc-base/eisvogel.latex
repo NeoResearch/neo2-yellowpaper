@@ -751,7 +751,7 @@ $if(logo)$
 \includegraphics[width=$if(logo-width)$$logo-width$$else$100$endif$pt, left]{$logo$}
 $endif$
 
-\textsf{$date$\\Revision: $commit$}}
+\textsf{$if(released)$Released: $released$\\$endif$Build: $date$\\Revision: $commit$}}
 \end{flushleft}
 \end{titlepage}
 \restoregeometry

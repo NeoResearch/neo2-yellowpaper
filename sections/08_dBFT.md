@@ -1,10 +1,13 @@
 # Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives { #biz }
 
-_This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for NEO blockchain._
+_This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
 
-Several studies in blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
-Distinct to other prior works in blockchain literature, NEO blockchain proposes a BFT Consensus Mechanism with **one block finality** in the **first layer** [@Neo2015WP].
-One block finality offers significant advantages for real-world applications - End users, merchants, and exchanges can know that their transaction was processed definitively and that there is no chance for the transaction to be reverted. However, it also poses some additional constraints, vulnerabilities and challenges when compared to other Consensus Mechanisms.
+Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. 
+However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
+Distinct to other prior works in the literature, NEO blockchain proposes a BFT consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
+One block finality offers significant advantages for real case applications - End users, merchants, and exchanges can know that their transaction was definitively processed and that there is no chance or if it to be reverted.
+While NEO Ecosystem is designed for Decentralized Applications (DApps), which can be written in a variety of well-known languages, it is noteworthy that append storage applications pose different challenges when compared to the needs of SC transaction persisting, which involves State Machine Replication (SMR) [@schneider1990implementing] and are the core of several DApps.
+Besides its notorious advantages, these characteristics impose some additional constraints, vulnerabilities and challenges when compared to other proposed strategies.
 
 The goal of this technical material is to highlight the main adaptions from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine

@@ -1,6 +1,6 @@
 # Neo Network
 
-_This section is part of the Community Yellow Paper ^[See [Community Yellow Paper repository](https://github.com/neoresearch/yellowpaper)] initiative, a community-driven technical specification for Neo blockchain._
+_This section is part of the Community Yellow Paper ^[See [Community Yellow Paper](https://github.com/neoresearch/yellowpaper) repository] initiative, a community-driven technical specification for Neo blockchain._
 
 ## Blockchain Networks: nodes and wallets
 
@@ -29,6 +29,7 @@ P2P commands can be found on [Neo Project](https://https://github.com/neo-projec
 RPC commands can be found on [Neo Project](https://https://github.com/neo-project/neo) repository and also [Neo Plugins](https://https://github.com/neo-project/neo-plugins).
 
 A summary of RPC commands on Neo network:
+
 * `getaccountstate`
 * `getassetstate`
 * `getbestblockhash`
@@ -57,6 +58,7 @@ A summary of RPC commands on Neo network:
 These extra RPC commands can be found on [Neo Plugins](https://github.com/neo-project/neo-plugins).
 
 RpcWallet plugin (`RpcWallet/RpcWallet.cs`):
+
 * `claimgas`
 * `dumpprivkey`
 * `getbalance`
@@ -70,6 +72,7 @@ RpcWallet plugin (`RpcWallet/RpcWallet.cs`):
 * `sendtoaddress`
 
 RpcNep5Tracker plugin (`RpcNep5Tracker/RpcNep5Tracker.cs`):
+
 * `getnep5balances`
 
 ## Assets and Smart Contracts

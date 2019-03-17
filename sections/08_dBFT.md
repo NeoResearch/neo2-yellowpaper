@@ -1,4 +1,4 @@
-# Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives { #sec:dBFT}
+# Delegated Byzantine Fault Tolerance: Technical details, challenges and perspectives {#sec:dBFT}
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper](https://github.com/neoresearch/yellowpaper) repository] initiative, a community-driven technical specification for Neo blockchain._
 

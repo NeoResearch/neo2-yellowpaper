@@ -78,4 +78,6 @@ RpcNep5Tracker plugin (`RpcNep5Tracker/RpcNep5Tracker.cs`):
 
 * `getnep5balances`
 
+If you feel some information is still missing here, please refer to the [Official Neo API Documentation](https://docs.neo.org/en-us/node/cli/latest-version/api.html).
+
 ## Assets and Smart Contracts

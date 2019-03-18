@@ -5,11 +5,11 @@ _This section is part of the Community Yellow Paper ^[See [Community Yellow Pape
 Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. 
 However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
 Distinct to other prior works in the literature, NEO blockchain proposes a BFT consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
-One block finality offers significant advantages for real case applications - End users, merchants, and exchanges can know that their transaction was definitively processed and that there is no chance or if it to be reverted.
+One block finality offers significant advantages for real case applications - End users, merchants, and exchanges can know that their transaction was definitively processed and that there is no chance for it to be reverted.
 While NEO Ecosystem is designed for Decentralized Applications (DApps), which can be written in a variety of well-known languages, it is noteworthy that append storage applications pose different challenges when compared to the requirements of SC's transactions persisting, which involves State Machine Replication (SMR) [@schneider1990implementing] and are the core of several DApps.
-Besides its notorious advantages, these characteristics impose some additional constraints, vulnerabilities and challenges when compared to other proposed strategies.
+Besides its significant advantages, these characteristics impose some additional constraints, vulnerabilities and challenges when compared to other proposed strategies.
 
-The goal of this technical material is to highlight the main adaptions from the classical Practical
+The goal of this technical material is to highlight the main adaptations from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine
 Fault Tolerance (dBFT) currently used in the NEO blockchain core library (see [Neo Project Github](https://github.com/neo-project/neo)).
 Furthermore, it describes a novel mathematical model that is able to verify specific consensus behavior by means of a discrete model which can simulate its operation in real cases.

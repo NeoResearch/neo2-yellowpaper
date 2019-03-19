@@ -5,7 +5,7 @@ _This section is part of the Community Yellow Paper ^[See [Community Yellow Pape
 Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. 
 However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
 
-Distinct to other prior works in blockchain literature, NEO proposes a BFT consensus mechanism with **One Block Finality** in the **First Layer** [@Neo2015WP].
+Distinct to other prior works in the literature, NEO proposes a BFT consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
 One Block Finality offers significant advantages for real-world applications - For example, end users, merchants, and exchanges can be confident that their transactions were definitively processed and that there is no chance for them to be reverted.
 While the NEO Ecosystem has been designed for hosting Decentralized Applications (DApps), it is worth noting that persisting SC transactions (which involves State Machine Replication (SMR) and is the core functionality of several DApps) poses a unique set of challenges.
 DApps utilising SCs tend to be more complex to develop and optimize when compared to DApps focused only on appending storage [@schneider1990implementing].

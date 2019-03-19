@@ -45,7 +45,7 @@ The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985]
 PBFT correctness is guaranteed by having three different phases: pre-prepare, prepare and commit^[NEO dBFT 2.0 also consists of three phases, with a slight naming change: prepare request, prepare response, and commit].
 
 * On pre-prepare, primary sends a sequence number $k$ together with message $m$ and signed digest $d$.
-Backup $i$ accept pre-prepare if signature is correct, $k$ is in valid interval^[A special technique avoids the exhaustion of sequence number space by faulty primary], and $i$ has not yet accepted a pre-prepare for same $k$ and same view.
+Backup $i$ accepts pre-prepare if the signature is correct, $k$ is in the valid interval^[A special technique avoids the exhaustion of sequence number space by faulty primary], and $i$ has not yet accepted a pre-prepare for the same $k$ and the same view.
 
 * When pre-prepare is accepted, a prepare message is broadcast (including to primary), and a node is considered `prepared` when it receives at least $2f$ prepare messages that match its local pre-prepare, for the same view.
 So, at this point, for a given view, the non-faulty replicas already agree on total order for requests.

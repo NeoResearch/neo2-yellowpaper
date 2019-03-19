@@ -19,7 +19,7 @@ While highlighting the positive aspects of the current NEO consensus system,  th
 The latter can be achieved by a combination of NEO's requirements and novel ideas in connection with well-known studies from the literature.
 
 The remainder of this document is organized as follows.
-[Section @Sec:Background] provides a brief background on the classical PBFT.
+[Section @Sec:Background] provides a brief background on the classical pBFT.
 [Section @Sec:NEOdBFT] describes the key modification made from the literature for the achievement of NEO's dBFT.
 [Section @Sec:dBFTDetails] details the current state-of-the-art discussions regarding NEO's dBFT, and presents didactic pseudocodes and flowcharts.
 Finally, [Section @Sec:dBFT_MILP] proposes a novel mathematical programming model based on Linear Integer Programming, which models an optimal adversary that will challenge the network and verify its limitations in worst case scenarios.
@@ -39,10 +39,10 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
   * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
   * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
-The considered network on PBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT. Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
+The considered network on pBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT. Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
 
-PBFT correctness is guaranteed by having three different phases: pre-prepare, prepare and commit^[NEO dBFT 2.0 also consists of three phases, with a slight naming change: prepare request, prepare response, and commit].
+pBFT correctness is guaranteed by having three different phases: pre-prepare, prepare and commit^[NEO dBFT 2.0 also consists of three phases, with a slight naming change: prepare request, prepare response, and commit].
 
 * On pre-prepare, primary sends a sequence number $k$ together with message $m$ and signed digest $d$.
 Backup $i$ accept pre-prepare if signature is correct, $k$ is in valid interval^[A special technique avoids the exhaustion of sequence number space by faulty primary], and $i$ has not yet accepted a pre-prepare for same $k$ and same view.
@@ -53,19 +53,19 @@ As soon as $2f +1$ non-faulty nodes are `prepared`, the network can be considere
 
 * Every `committed` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes will become `committed`.
 
-PBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from $2f+1$ nodes in order to move forward (to the next operation).
+pBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from $2f+1$ nodes in order to move forward (to the next operation).
 This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
-One difference is that, for PBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands of valid blocks for the same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on PBFT.
+One difference is that, for pBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands of valid blocks for the same height, due to different groupings (different combinations of transactions). So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered on pBFT.
 
 ## NEO dBFT core modifications {#sec:NEOdBFT}
 
- In summary, we highlight some differences between PBFT and dBFT:
+ In summary, we highlight some differences between pBFT and dBFT:
 
 * One block finality to the end-users and seed nodes;
 * Use of cryptographic signatures during different phases of the procedures in order to avoid exposure of nodes commitment to the current block;
 * Ability to propose blocks based on information shared through block headers (transactions are shared and stored in an independent syncronization mechanism);
 * Avoid double exposure of block signatures by not allowing view changes after the commitment phase;
-* Regeneration mechanism able to recover failed nodes both, in the local hardware and in the network P2P consensus layer.
+* Regeneration mechanism able to recover failed nodes both in the local hardware and in the network P2P consensus layer.
 
 
 <!-- In this sense, novel tools and strategies can still be incorporated in the current dBFT in order to design an even more robust and reliable multi-agent agent based consensus mechanism. -->
@@ -92,17 +92,17 @@ dBFT states are the following:
 
 * ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
 
-* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced on dBFT 2.0).
+* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced in dBFT 2.0).
 
-* ResponseSent : true if block header confirmation has been sent (introduced on dBFT 2.0: internal state used only for blocking node to triggering consensus OnTransaction event)
+* ResponseSent : true if block header confirmation has been sent (introduced in dBFT 2.0: internal state used only for blocking node to triggering consensus OnTransaction event)
 
-* CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
+* CommitSent : true if block signature has been sent (this state was only introduced in dBFT 2.0 and replaced SignatureSent)
 
 * BlockSent : true if block has been sent, false otherwise
 
 * ViewChanging : true if view change mechanism has been triggered, false otherwise
 
-* IsRecovering : true if a valid recovery payload was received and is being processed (introduced on dBFT 2.0: internal state)
+* IsRecovering : true if a valid recovery payload was received and is being processed (introduced in dBFT 2.0: internal state)
 
 
 The first dBFT handled these states explicitly as flags (ConsensusState enum).

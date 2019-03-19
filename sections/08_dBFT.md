@@ -48,7 +48,7 @@ pBFT correctness is guaranteed by having three different phases: pre-prepare, pr
 Backup $i$ accept pre-prepare if signature is correct, $k$ is in valid interval^[A special technique avoids the exhaustion of sequence number space by faulty primary], and $i$ has not yet accepted a pre-prepare for same $k$ and same view.
 
 * When pre-prepare is accepted, a prepare message is broadcast (including to primary), and a node is considered `prepared` when it receives at least $2f$ prepare messages that match its local pre-prepare, for the same view.
-So, at this point, for a given view, the non-faulty replicas already agree on total order for requests.
+So, at this point, for a given view, the non-faulty replicas already agree on the total order for requests.
 As soon as $2f +1$ non-faulty nodes are `prepared`, the network can be considered as `committed`.
 
 * Every `committed` replica broadcasts a commit message, and as soon as node $i$ has received $2f+1$ commit messages, node $i$ is `committed-local`. It is guaranteed that, eventually, even with the occurrence of change views, a system with `committed-local` nodes will become `committed`.

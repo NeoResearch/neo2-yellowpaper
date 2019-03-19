@@ -92,17 +92,17 @@ dBFT states are the following:
 
 * ~~SignatureSent : true if signature has been sent, false otherwise~~ (removed on dBFT 2.0 because of extra commit phase carrying signatures)
 
-* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced on dBFT 2.0).
+* RequestSentOrReceived : true if a valid signature of Primary has been received, false otherwise (introduced in dBFT 2.0).
 
-* ResponseSent : true if block header confirmation has been sent (introduced on dBFT 2.0: internal state used only for blocking node to triggering consensus OnTransaction event)
+* ResponseSent : true if block header confirmation has been sent (introduced in dBFT 2.0: internal state used only for blocking node to triggering consensus OnTransaction event)
 
-* CommitSent : true if block signature has been sent (this state was only introduced on dBFT 2.0 and replaced SignatureSent)
+* CommitSent : true if block signature has been sent (this state was only introduced in dBFT 2.0 and replaced SignatureSent)
 
 * BlockSent : true if block has been sent, false otherwise
 
 * ViewChanging : true if view change mechanism has been triggered, false otherwise
 
-* IsRecovering : true if a valid recovery payload was received and is being processed (introduced on dBFT 2.0: internal state)
+* IsRecovering : true if a valid recovery payload was received and is being processed (introduced in dBFT 2.0: internal state)
 
 
 The first dBFT handled these states explicitly as flags (ConsensusState enum).

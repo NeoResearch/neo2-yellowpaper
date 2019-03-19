@@ -9,7 +9,7 @@ Distinct to other prior works in the literature, NEO proposes a BFT consensus me
 One block finality offers significant advantages for real-world applications - For example, end users, merchants, and exchanges can be confident that their transactions were definitively processed and that there is no chance for them to be reverted.
 While the NEO Ecosystem has been designed for hosting Decentralized Applications (DApps), it is noteworthy that persisting SC transactions (which involves State Machine Replication (SMR) and is the core functionality of several DApps) poses a unique set of challenges.
 DApps utilising SCs tend to be more complex to develop and optimize when compared to DApps focused only on appending storage [@schneider1990implementing].
-Satisfying the requirements of both SC DApps and append storage DApps poses additional constraints, vulnerabilities and challenges for a one block finality consensus mechanism when compared to the other types of consensus mechanisms described in literature. 
+Besides its significant advantages, satisfying this set of requirements poses additional constraints, vulnerabilities and challenges when compared to other consensus applications dealt in the literature.
 
 The goal of this technical material is to highlight the main adaptations from the classical Practical
 Byzantine Fault Tolerance (pBFT) to the Delegated Byzantine

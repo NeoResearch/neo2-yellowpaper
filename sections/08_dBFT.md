@@ -2,7 +2,7 @@
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper](https://github.com/neoresearch/yellowpaper) repository] initiative, a community-driven technical specification for Neo blockchain._
 
-Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. 
+Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey].
 However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
 Distinct to other prior works in the literature, NEO blockchain proposes a BFT consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
 One block finality offers significant advantages for real case applications - End users, merchants, and exchanges can know that their transaction was definitively processed and that there is no chance for it to be reverted.
@@ -123,6 +123,51 @@ It is also assumed that transitions are processed *in the order* they are presen
 ```
 
 This block would first wait until clock `C` has over 5 seconds, then process `A`, then check clock to meet 7 seconds, and then process `B`. This allows a more precise description of the actual dBFT 2.0 implementation.
+
+Let's start with original PBFT, on [Figure @Fig:pbft]. `$(message)` means message is signed.
+ Dashed lines indicates timeouts or alternative transitions (only on fail states). `CKP` means checkpoint (related to `n`, `s`, `h'` and `H'`).
+
+~~~~ {.graphviz #fig:pbft caption="PBFT" width=90% filename="graphviz-pbft"}
+digraph PBFT {
+  graph [bgcolor=lightgoldenrodyellow]
+        //rankdir=LR;
+        size="11";
+  EmptyClient [ label="", width=0, height=0, style = invis ];
+  node [shape = circle]; InitialClient;
+  node [shape = doublecircle]; RequestExecuted;
+  Empty [ label="", width=0, height=0, style = invis ];
+	node [shape = circle]; Initial;
+	node [shape = doublecircle]; committed_local_m_v_n_i;
+	node [shape = circle];
+  EmptyClient -> InitialClient;
+  InitialClient -> RequestSentToReplica [ label = "client c sends \n $(REQUEST,o,t,c) \n with timestamp t \n to primary \n C' := 0"];
+  RequestSentToReplica -> RequestSentToReplica [ label = "(C' > T')? \n retransmit \n C' := 0" ];
+  RequestSentToReplica -> RequestExecuted [ label = "client receives f+1 (REPLY)"];
+  Empty -> Initial [label = "OnStart \n v := 0\n C := 0"];
+	Initial -> Primary [ label = "v mod R = i" ];
+  Initial -> Backup [ label = "not v mod R = i" ];
+  Primary -> prepare [ label = "client c sends \n $(REQUEST,o,t,c) \n with timestamp t \n n := assign_seq_number \n broadcast ((PREPREPARE,v,n,d),m)" ]
+  Backup -> Initial [ label = "v+1 mod R = i \n received 2f (VIEW_CHANGE,v+1) \n broadcast $(NEW_VIEW, v+1, 2f+1 proof) \n v := v + 1"];
+	Backup -> prepare [ label = "received ((PREPREPARE,v,n,d),m) \n h' < n < H' \n in_view(v) \n not accepted other PP with \n same v and different d \n broadcast signed (PREPARE,v,n,d,i) \n C := 0" ];
+  prepare -> ViewChanging [ label = "(C >= T)? \n broadcast \n $(VIEW_CHANGE,v+1,n=s,CKP,i)", style="dashed" ];
+  ViewChanging -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  prepare -> prepared_m_v_n_i [ label = "received 2f PREPARE from backups" ];
+  prepare -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  prepared_m_v_n_i -> commit [ label = "broadcast $(COMMIT,v,n,D(m),i)" ];
+  commit -> committed_local_m_v_n_i [ label = "has 2f+1 commits \n execute operation" ];
+  commit -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  committed_local_m_v_n_i -> Initial [ label = "send to client c \n $(REPLY,v,t,c,i,r)"];
+}
+~~~~~~~~~~~~
+
+<!-- BEGIN COMMENT -->
+
+![PBFT fluxogram\label{fig:pbft}](graphviz-images/graphviz-pbft.jpg)
+
+<!-- END COMMENT -->
+
+Let's switch to  dBFT now.
+
 
 ~~~~ {.graphviz #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {

@@ -385,7 +385,6 @@ $initialized^{t}_{i, h, v}$
 $SendPrepReq^{t}_{i, h, b, v}$
 
 : binary variable that indicates if replica $i \in R$ is sending Prepare Request message (to all nodes) at height $h$ and view $v$, on time $t$, for proposed block $b$. ACTION VARIABLE MUST BE SET ONLY ONCE FOR EVERY REPLICA, HEIGHT AND BLOCK.
-% Nao entendi esse only once, faltou o View na descricao, nao? Caso o view seja outro ela pode ser setada denovo
 
 $SendPrepResp^{t}_{i, h, b, v}$
 

@@ -316,7 +316,8 @@ The idea behind this is that a node that is starting late will probably find som
 Here, the internal state $IsRecovering$, differently than the $ResponseSent$ state, is didactically reproduced for simplifying the possible effects that a Recover message can trigger.
 In this sense, without loss of generality, arrows that arrive on it can be directly connected with the ones that leave it.
 
-~~~~ {.graphviz #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
+~~~~ {.graphviz
+      #fig:dbft-v2-recover caption="dBFT 2.0 State Machine with recover mechanisms" width=90% filename="graphviz-dbft-v2-recover"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;

@@ -2,7 +2,7 @@
 
 _This section is part of the Community Yellow Paper ^[See [Community Yellow Paper](https://github.com/neoresearch/yellowpaper) repository] initiative, a community-driven technical specification for Neo blockchain._
 
-Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey]. 
+Several studies in the blockchain literature have explored partially synchronous and fully asynchronous Byzantine Fault Tolerant (BFT) systems [@Hao2018DynnamicPBFT; @Duan:2018:BAB:3243734.3243812; @miller2016honey].
 However, few of them have been applied in a real-world Smart Contract (SC) scenario - i.e. where multiple distinct decentralized applications use the same BFT system.
 
 Distinct to other prior works in the literature, NEO proposes a BFT consensus mechanism with **one block finality** in the **first layer** [@Neo2015WP].
@@ -34,14 +34,14 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for the NEO network and blockchain protocols in general.
 
-* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine. 
-A timeout mechanism is used, and by doubling delays exponentially at every view, pBFT can prevent attacks from malicious network delays that cannot grow indefinitely. 
+* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine.
+A timeout mechanism is used, and by doubling delays exponentially at every view, pBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
 In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
 
   * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
   * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
-The considered network on pBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT. 
+The considered network on pBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT.
 Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
 
@@ -58,8 +58,8 @@ As soon as $2f +1$ non-faulty nodes are `prepared`, the network can be considere
 
 pBFT considers that clients interact and broadcast messages directly to the primary node, then receiving independent responses from $2f+1$ nodes in order to move forward (to the next operation).
 This is a similar situation for NEO blockchain, where information is spread by means of a peer-to-peer network, but in this case, the location of consensus nodes is unknown (in order to prevent direct delay attacks and denial of service).
-One difference is that, for pBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently. 
-For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands of valid blocks for the same height, due to different groupings (different combinations of transactions). 
+One difference is that, for pBFT, clients submit atomic and independent operations for a unique timestamp, which are processed and published independently.
+For NEO blockchain, consensus nodes have to group transactions into batches, called blocks, and this process may lead to the existence of thousands of valid blocks for the same height, due to different groupings (different combinations of transactions).
 So, in order to guarantee block finality (a single and unique block can exist in a given height), we may have to consider situations where the "client" (block proposer) is also faulty, which is not considered in pBFT.
 
 ## NEO dBFT core modifications {#sec:NEOdBFT}
@@ -129,10 +129,64 @@ It is also assumed that transitions are processed *in the order* they are presen
  B
 ```
 
-This block would first wait until clock `C` has over 5 seconds, then process `A`, then check clock to meet 7 seconds, and then process `B`. 
+This block would first wait until clock `C` has over 5 seconds, then process `A`, then check clock to meet 7 seconds, and then process `B`.
 This allows a more precise description of the actual dBFT 2.0 implementation.
 
-~~~~ {.graphviz #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
+Let's start with original PBFT, on [Figure @Fig:pbft]. `$(message)` means message is signed.
+ Dashed lines indicates timeouts or alternative transitions (only on fail states). `CKP` means checkpoint (related to `n`, `s`, `h'` and `H'`).
+
+<!-- BEGIN COMMENT -->
+
+![Basic structure for PBFT\label{fig:pbft}](graphviz-images/graphviz-pbft.jpg)
+
+<!-- END COMMENT -->
+
+~~~ {.graphviz
+     #fig:pbft caption="Basic structure for PBFT" width=90% filename="graphviz-pbft"}
+digraph PBFT {
+  graph [bgcolor=lightgoldenrodyellow]
+        //rankdir=LR;
+        size="11";
+  EmptyClient [ label="", width=0, height=0, style = invis ];
+  node [shape = circle]; InitialClient;
+  node [shape = doublecircle]; RequestExecuted;
+  Empty [ label="", width=0, height=0, style = invis ];
+	node [shape = circle]; Initial;
+	node [shape = doublecircle]; committed_local_m_v_n_i;
+	node [shape = circle];
+  EmptyClient -> InitialClient;
+  InitialClient -> RequestSentToReplica [ label = "client c sends \n $(REQUEST,o,t,c) \n with timestamp t \n to primary \n C' := 0"];
+  RequestSentToReplica -> RequestSentToReplica [ label = "(C' > T')? \n retransmit \n C' := 0" ];
+  RequestSentToReplica -> RequestExecuted [ label = "client receives f+1 (REPLY)"];
+  Empty -> Initial [label = "OnStart \n v := 0\n C := 0"];
+	Initial -> Primary [ label = "v mod R = i" ];
+  Initial -> Backup [ label = "not v mod R = i" ];
+  Primary -> prepare [ label = "client c sends \n $(REQUEST,o,t,c) \n with timestamp t \n n := assign_seq_number \n broadcast ((PREPREPARE,v,n,d),m)" ]
+  Backup -> Initial [ label = "v+1 mod R = i \n received 2f (VIEW_CHANGE,v+1) \n broadcast $(NEW_VIEW, v+1, 2f+1 proof) \n v := v + 1"];
+	Backup -> prepare [ label = "received ((PREPREPARE,v,n,d),m) \n h' < n < H' \n in_view(v) \n not accepted other PP with \n same v and different d \n broadcast signed (PREPARE,v,n,d,i) \n C := 0" ];
+  prepare -> ViewChanging [ label = "(C >= T)? \n broadcast \n $(VIEW_CHANGE,v+1,n=s,CKP,i)", style="dashed" ];
+  ViewChanging -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  prepare -> prepared_m_v_n_i [ label = "received 2f PREPARE from backups" ];
+  prepare -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  prepared_m_v_n_i -> commit [ label = "broadcast $(COMMIT,v,n,D(m),i)" ];
+  commit -> committed_local_m_v_n_i [ label = "has 2f+1 commits \n execute operation" ];
+  commit -> Initial [ label = "received (NEW_VIEW, v+1, 2f+1)\nv:=v+1" , style="dashed"];
+  committed_local_m_v_n_i -> Initial [ label = "send to client c \n $(REPLY,v,t,c,i,r)"];
+}
+~~~
+
+
+
+Let's switch to  dBFT now.
+
+<!-- BEGIN COMMENT -->
+
+![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/graphviz-dbft-sm.jpg)
+
+<!-- END COMMENT -->
+
+~~~ {.graphviz
+    #fig:dbft-sm caption="dBFT 2.0 State Machine for specific block height" width=90% filename="graphviz-dbft-sm"}
 digraph dBFT {
   graph [bgcolor=lightgoldenrodyellow]
         //rankdir=LR;
@@ -153,18 +207,14 @@ digraph dBFT {
   Primary -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 	Backup -> ViewChanging [ label = "(C >= T exp(v+1))?\n C := 0", style="dashed" ];
 }
-~~~~~~~~~~~~
+~~~
 
-<!-- BEGIN COMMENT -->
 
-![dBFT State Machine for specific block height\label{fig:dbft-sm}](graphviz-images/graphviz-dbft-sm.jpg)
 
-<!-- END COMMENT -->
-
-On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise). 
-If node is Primary, it may proceed to `RequestSentOrReceived` after `SendPrepareRequest` action (that selects transactions and creates a new proposed block) after $T$ seconds. 
+On [Figure @Fig:dbft-sm], consensus node starts on `Initial` state, on view $v=0$. Given `H` and `v`, a round-robin procedure detects if current node $i$ is Primary: $(H + v) \mod R = i$ (it is set to backup otherwise).
+If node is Primary, it may proceed to `RequestSentOrReceived` after `SendPrepareRequest` action (that selects transactions and creates a new proposed block) after $T$ seconds.
 If node is Backup, it needs to wait for a `OnPrepareRequest` action.
-After clocks expire, nodes may enter a `ViewChanging` state, what guarantees *liveness* to the network in case of failed Primary. However, CommitSet state guarantees that no view change occurs, as the node is already *committed* to that specific block (so it won't provide signature to any other block on that height). 
+After clocks expire, nodes may enter a `ViewChanging` state, what guarantees *liveness* to the network in case of failed Primary. However, CommitSet state guarantees that no view change occurs, as the node is already *committed* to that specific block (so it won't provide signature to any other block on that height).
 Since this could compromise the liveness of the network, a Recovery process was proposed (see [Figure @Fig:dbft-v2-recover]).
 `EnoughPreparations`, `EnoughCommits` and `EnoughViewChanges` depend on having enough valid responses that surpass the byzantine level $M$ (thus, respecting maximum number of faulty nodes $f$).
 `T` is currently, until version 2.0, calculated as a basin on the time that the node received last block instead of checking the timestamp in which previous header was signed.
@@ -236,7 +286,7 @@ In addition, it adds robustness with a survival/regeneration strategy.
 ## Regeneration
 
 The Recover/Regeneration event is designed for responding to a given failed node that lost part of the history.
-In addition, it also has a local backup that restores nodes in some cases of hardware failure. 
+In addition, it also has a local backup that restores nodes in some cases of hardware failure.
 This local level of safety (which can be seen as a hardware faulty safety) is essential, reducing the chance of specifically designed malicious attacks.
 
 In this sense, if the node had failed and recovered its health, it automatically sends a $change\_view$ to $0$, which means that that node is back and wants to hear the history from the others.

@@ -36,7 +36,7 @@ Struct        |  | True | Exception | | | | *
 
 ### Opcodes
 
-#### Value pushing / constants
+#### Value pushing / constants (0-96)
 
 Word          | Opcode | Hex | Input     | Output  | Parameter | Description
 -------------:| ------ | --- | --------- | ------- | --------- | -----------
@@ -48,5 +48,62 @@ PUSHDATA4 | 78 | 4E | none | data | 4 bytes + data  | The next four bytes contai
 PUSHM1 | 79 | 4F | none | BigInt(-1) or {0xff}  | none  | The number -1 is pushed onto the stack.
 PUSH1 / PUSHT | 81 | 51 | none | BigInt(1) or {0x01}  | none  | The number 1 is pushed onto the stack.
 PUSH{K=2..16} | 82..96 | 52..60 | none | BigInt(K) or hex(K)  | none  | The number K is pushed onto the stack.
+
+#### Control Flow
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Stack
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Splice
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Bitwise Logic
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Arithmetic
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Crypto
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+
+#### Array / Map / Struct
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Stack Isolation
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+
+#### Exceptions (240-241)
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+THROW         | 240      | F0  | none      | none (or FAULT)  | none      | Halts the execution of the vm by setting VMState.FAULT
+THROWIFNOT    | 241      | F1  | `x`      | none (or FAULT)  | none      | Removes top stack item `x`, and halts the execution of the vm by setting VMState.FAULT only if `x` is False.
+
 
 ## NeoContract

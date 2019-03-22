@@ -86,11 +86,20 @@ Word          | Opcode | Hex | Input     | Output  | Parameter | Description
 PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
 
 
-#### Array / Map / Struct
+#### Array / Map / Struct (192-)
 
 Word          | Opcode | Hex | Input     | Output  | Parameter | Description
 -------------:| ------ | --- | --------- | ------- | --------- | -----------
-PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+ARRAYSIZE     | 192      | C0  | (1): `array`   | (1): `length(array)`  | none      | An array is removed from top of the main stack. Its size is put on top of the main stack.
+PACK          | 193      | C1  | (`n+1`): `n` `x1` `x2` ... `xn`  | (1):  `[x1,x2,...,xn]`  | none      | A value `n` is taken from top of main stack. The next `n` items on main stack are removed, put inside n-sized array and this array is put on top of the main stack.
+UNPACK        | 194      | C2  | (1): `[x1,x2,...,xn]`  | (`n`): `x1`,`x2`,...,`xn`  | none     | An array is removed from top of the main stack. Its elements are put on top of the main stack (in reverse order) and the array size is also put on main stack.
+PICKITEM      | 195      | C3  | (2): `n` `[x1,...,xn,...]`  | (1): `xn`  | none     | An input index n (or key) and an array (or map) are taken from main stack. Element array[n] (or map[n]) is put on top of the main stack.
+SETITEM       | 196      | C4  | (3): `v` `n` `x=[x1,...,xn,...]`  | (0): `x[n]=v`  | none     | A value v, index n (or key) and an array (or map) are taken from main stack. Attribution array[n]=v (or map[n]=v) is performed.
+NEWARRAY   | 197     | C5  | (1): `n`  | (1): `[0: 00, ..., n: 00]`  | none     | A value n is taken from top of main stack. A zero-filled array type with size n is put on top of the main stack.
+NEWSTRUCT   | 198     | C6  | (1): `n`  | (1): `{0: 00, ..., n: 00}`  | none     | A value n is taken from top of main stack. A zero-filled struct type with size n is put on top of the main stack.
+NEWMAP     | 199     | C7  | none  | (1): `map{}`  | none     | A Map is created and put on top of the main stack.
+
+TODO: continue
 
 
 

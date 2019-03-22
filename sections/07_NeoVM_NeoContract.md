@@ -34,5 +34,19 @@ Interop       |  | (Interop == null)? False : True | Exception |  | * | |
 Map           |  | True | Exception | |  | * |
 Struct        |  | True | Exception | | | | *
 
+### Opcodes
+
+#### Value pushing / constants
+
+Word          | Opcode | Hex | Input     | Output  | Parameter | Description
+-------------:| ------ | --- | --------- | ------- | --------- | -----------
+PUSH0/PUSHF   | 0      | 00  | none      | {0x''}  | none      | An empty array of bytes is pushed onto the stack
+PUSHBYTES{1..75} | 1..75 | 01..4B | none | data | data (1..75 bytes) | The next opcode bytes is data to be pushed onto the stack
+PUSHDATA1 | 76 | 4C | none | data | 1 byte + data  | The next byte contains the number of bytes to be pushed onto the stack
+PUSHDATA2 | 77 | 4D | none | data | 2 bytes + data  | The next two bytes contain the number of bytes to be pushed onto the stack
+PUSHDATA4 | 78 | 4E | none | data | 4 bytes + data  | The next four bytes contain the number of bytes to be pushed onto the stack
+PUSHM1 | 79 | 4F | none | BigInt(-1) or {0xff}  | none  | The number -1 is pushed onto the stack.
+PUSH1 / PUSHT | 81 | 51 | none | BigInt(1) or {0x01}  | none  | The number 1 is pushed onto the stack.
+PUSH{K=2..16} | 82..96 | 52..60 | none | BigInt(K) or hex(K)  | none  | The number K is pushed onto the stack.
 
 ## NeoContract

@@ -1,4 +1,5 @@
-# yellowpaper
+# NEO Yellow Paper
+
 Community Yellow Paper: A Technical Specification for Neo Blockchain
 
 ## document format

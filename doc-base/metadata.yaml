@@ -27,4 +27,5 @@ titlepage: true
 titlepage-rule-color: "00cb00"
 logo: "doc-base/neo.png"
 logo-width: 50
+reference-section-title: "References"
 ...

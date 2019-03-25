@@ -1,3 +1,5 @@
+<img src="/doc-base/neo.png" align="right" height="70"/>
+
 # NEO Yellow Paper
 
 Community Yellow Paper: A Technical Specification for Neo Blockchain

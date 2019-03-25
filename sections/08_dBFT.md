@@ -673,7 +673,7 @@ t           & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & ...\\\cline{2-10}
 
 &nbsp;\newline
 
-## Acknowledgements
+## Acknowledgements {#acknowledgements .unnumbered}
 
 The key ideas and development behind dBFT 2.0 were mainly guided by Erik Zhang, in open GitHub discussions, and also valuable contributions from community members who took their precious time to discuss BFT ideas and to propose improvements.
 We are also grateful to developers that managed to turn this into reality, by constantly solving challenging problems.

@@ -41,6 +41,10 @@ In the current formula, timeout happens following a left-shift operator accordin
   * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
   * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
+It should be noticed that a nodes do not increase change view time until they do not pass to a higher view.
+In this sense, timer might expire more than 1 time for each view.
+Without loss of generality this can happen since change view is considered to be a locked state.
+
 The considered network on pBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT.
 Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
 The resiliency of $3f+1$ is optimal for a Byzantine Agreement [@BrachaToueg1985], with at most $f$ malicious nodes.
@@ -106,6 +110,8 @@ dBFT states are the following:
 * BlockSent : true if block has been sent, false otherwise
 
 * ViewChanging : true if view change mechanism has been triggered, false otherwise
+
+* MoreThanFNodesCommittedOrLost : true in the case that more than `F` nodes are locked in the commited phase or considered to be lost (introduced in dBFT 2.0).
 
 * IsRecovering : true if a valid recovery payload was received and is being processed (introduced in dBFT 2.0: internal state)
 

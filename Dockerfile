@@ -26,6 +26,7 @@ RUN pip install pandocfilters
 # wget https://raw.githubusercontent.com/jgm/pandocfilters/master/examples/comments.py # (already done!)
 
 RUN apt-get install -y texlive-fonts-extra
+RUN apt-get install -y git
 
 #patch imagemagick
 RUN sed -i 's/<policy domain="coder" rights="none" pattern="PDF" \/>/<policy domain="coder" rights="read|write" pattern="PDF" \/>/g' /etc/ImageMagick-6/policy.xml

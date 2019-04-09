@@ -1,0 +1,29 @@
+---
+title: Smart Economy
+author:
+- Igor M. Coelho
+- Vitor N. Coelho
+- Da Hongfei
+abstract: |
+  Draft Smart Economy.
+
+  &nbsp;
+numbersections: true
+documentclass: amsart
+lot: false
+lof: false
+linkcolor: blue
+citecolor: blue
+urlcolor: blue
+link-citations: true
+cref : true
+linkReferences: true
+nameInLink: true
+toc-own-page: true
+titlepage: true
+titlepage-rule-color: "00cb00"
+logo: "doc-base/neo.png"
+logo-width: 50
+sectioncounter: 8
+titlechapter: 9
+...

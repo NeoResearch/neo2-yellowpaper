@@ -4,6 +4,9 @@ cd sections
 for f in `ls *.md`; do
    echo "" >> ../yellow_paper.md
    cat 00_Preamble.md >> ../yellow_paper.md
+   yaml=`echo $f | cut -d'.' -f 1`
+   #echo "carregando ${yaml}"
+   python chapter_heading.py "${yaml}.yaml" >> ../yellow_paper.md
    echo "" >> ../yellow_paper.md
    cat $f >> ../yellow_paper.md
    echo "" >> ../yellow_paper.md

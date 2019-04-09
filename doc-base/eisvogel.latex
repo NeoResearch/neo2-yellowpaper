@@ -820,6 +820,7 @@ $endif$
 $if(has-frontmatter)$
 \mainmatter
 $endif$
+\setcounter{section}{$sectioncounter$}
 $body$
 
 $if(has-frontmatter)$

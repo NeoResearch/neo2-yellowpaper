@@ -35,7 +35,7 @@ debian_install:
 
 section: merge_sections
 	echo building yellow paper section $(SECTION)
-	[ -f sections/$(SECTION).md ] && pandoc -F pandoc-crossref -F ./graphviz.py -F ./comments.py --pdf-engine=xelatex sections/$(SECTION).yaml --template doc-base/eisvogel.latex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -M commit="`git rev-parse --verify HEAD | cut -c -7`" -H doc-base/yellowpaperstyle.pandoc sections/$(SECTION).md --toc -o build/$(SECTION).pdf --bibliography doc-base/references.bib || echo "Section not found"
+	[ -f sections/$(SECTION).md ] && pandoc -F pandoc-crossref -F ./graphviz.py -F ./comments.py --pdf-engine=xelatex sections/$(SECTION).yaml --template doc-base/eisvogel.latex -M date="`LC_ALL=en_US date "+%B %e, %Y"`" -M commit="`git rev-parse --verify HEAD | cut -c -7`" -H doc-base/yellowpaperstyle.pandoc sections/00_Preamble.md sections/$(SECTION).md --toc -o build/$(SECTION).pdf --bibliography doc-base/references.bib || echo "Section not found"
 
 merge_sections:
 	./merge_sections.sh

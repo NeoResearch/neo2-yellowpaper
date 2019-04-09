@@ -735,7 +735,7 @@ $endif$
 
 { \setstretch{1.4}
 \vfill
-\noindent {\huge \textbf{\textsf{$title$}}}
+\noindent {\huge \textbf{\textsf{ $if(titlechapter)$Chapter $titlechapter$ -- $endif$ $title$}}}
 $if(subtitle)$
 \vskip 1em
 {\Large \textsf{$subtitle$}}

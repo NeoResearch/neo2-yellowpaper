@@ -6,4 +6,5 @@ jobs:
       - checkout
       # build the application image
       - run: ./docker_build.sh
+      - run: ./docker_run.sh
       - run: echo "A first hello"

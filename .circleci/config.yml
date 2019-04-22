@@ -1,0 +1,8 @@
+version: 2
+jobs:
+  build:
+    steps:
+      - checkout
+      # build the application image
+      - run: ./docker_build.sh
+      - run: echo "A first hello"

@@ -7,7 +7,13 @@ cache:
   directories:
     - /sections/graphviz-images
     - /build
-    
+cache:
+  directories:
+  - $HOME/build
+  - $HOME/sections/graphviz-images
+  - ./sections/graphviz-images
+  - ./build
+
 script:
   - ./docker_build.sh
   - ./docker_run.sh

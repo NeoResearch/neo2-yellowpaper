@@ -3,6 +3,10 @@ sudo: required
 services:
   - docker
 
+cache:
+  directories:
+    - /build
+    
 script:
   - ./docker_build.sh
   - ./docker_run.sh

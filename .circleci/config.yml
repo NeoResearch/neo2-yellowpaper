@@ -1,8 +1,13 @@
 version: 2
 jobs:
   build:
+    machine: true
     steps:
       - checkout
-      # build the application image
-      - run: ./docker_build.sh
+      - run:
+          name: build
+          command: ./docker_build.sh
+      - run:
+          name: generatePDFs
+          command: ./docker_run.sh
       - run: echo "A first hello"

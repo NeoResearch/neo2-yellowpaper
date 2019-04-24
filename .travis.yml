@@ -5,6 +5,7 @@ services:
 
 cache:
   directories:
+    - /sections/graphviz-images
     - /build
     
 script:

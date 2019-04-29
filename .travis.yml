@@ -3,15 +3,14 @@ sudo: required
 services:
   - docker
 
-cache:
-  directories:
-  - $HOME/build
-  - $HOME/sections/graphviz-images
-  - ./sections/graphviz-images
-  - ./build
-  - $TRAVIS_BUILD_DIR/sections/graphviz-images
-  - $TRAVIS_BUILD_DIR/build
-
 script:
   - ./docker_build.sh
   - ./docker_run.sh
+  
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file: "/build/yellow_paper.pdf"
+  skip_cleanup: true
+  on:
+    tags: true  

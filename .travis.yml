@@ -3,12 +3,12 @@ services:
 - docker
 
 script:
-- "./docker_build.sh"
-- "./docker_run.sh"
+- ./docker_build.sh
+- ./docker_run.sh
 
 deploy:
   provider: releases
-  api_key: $GH_TOKEN
+  api_key: ${GH_TOKEN}
   file: 
     - ./build/yellow_paper.pdf
   skip_cleanup: true

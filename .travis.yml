@@ -12,7 +12,6 @@ script:
   
 deploy:
   provider: releases
-  api_key: "GITHUB OAUTH TOKEN"
   file: "/build/yellow_paper.pdf"
   skip_cleanup: true
   on:

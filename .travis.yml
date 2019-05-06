@@ -11,4 +11,4 @@ deploy:
   file: "/build/yellow_paper.pdf"
   skip_cleanup: true
   on:
-    tags: true
+    branch: testing-travis

@@ -8,6 +8,7 @@ script:
 
 deploy:
   provider: releases
+  api_key: "c9ac6146515751fd7daaed4222c3d84275cbdc26"
   file: "/build/yellow_paper.pdf"
   skip_cleanup: true
   on:

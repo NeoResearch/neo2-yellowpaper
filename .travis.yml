@@ -7,6 +7,7 @@ before_install:
 script:
 - "./docker_build.sh"
 - "./docker_run.sh"
+
 deploy:
   provider: releases
   file: "/build/yellow_paper.pdf"

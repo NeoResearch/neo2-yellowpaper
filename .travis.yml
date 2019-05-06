@@ -12,5 +12,5 @@ deploy:
   - "./build/yellow_paper.pdf"
   skip_cleanup: true
   on:
-    tags: true
+    master: test-deploy-travis
 

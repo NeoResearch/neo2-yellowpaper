@@ -10,7 +10,7 @@ deploy:
   provider: releases
   api_key: $GH_TOKEN
   file: 
-    - /build/yellow_paper.pdf
+    - ./build/yellow_paper.pdf
   skip_cleanup: true
   on:
     branch: testing-travis

@@ -1,9 +1,7 @@
 sudo: required
 services:
 - docker
-before_install:
-- openssl aes-256-cbc -K $encrypted_e274a0fda602_key -iv $encrypted_e274a0fda602_iv
-  -in github_deploy_key.enc -out ./github_deploy_key -d
+
 script:
 - "./docker_build.sh"
 - "./docker_run.sh"

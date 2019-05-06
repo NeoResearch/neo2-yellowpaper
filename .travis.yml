@@ -1,18 +1,15 @@
 sudo: required
-
 services:
-  - docker
-
+- docker
 before_install:
-  - openssl aes-256-cbc -K $encrypted_e274a0fda602_key -iv $encrypted_e274a0fda602_iv -in github_deploy_key.enc -out ./github_deploy_key -d
-
+- openssl aes-256-cbc -K $encrypted_e274a0fda602_key -iv $encrypted_e274a0fda602_iv
+  -in github_deploy_key.enc -out ./github_deploy_key -d
 script:
-  - ./docker_build.sh
-  - ./docker_run.sh
-  
+- "./docker_build.sh"
+- "./docker_run.sh"
 deploy:
   provider: releases
   file: "/build/yellow_paper.pdf"
   skip_cleanup: true
   on:
-    tags: true  
+    tags: true

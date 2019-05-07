@@ -8,9 +8,9 @@ script:
 
 deploy:
   provider: releases
-  api_key: ${GH_TOKEN}
+  api_key: ${GH_TOKEN_NEORESEARCH_BOT}
   file: 
     - ./build/yellow_paper.pdf
   skip_cleanup: true
   on:
-    tags: true
+    branch: master

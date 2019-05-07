@@ -19,7 +19,7 @@ deploy:
     - ./build/yellow_paper.pdf
   skip_cleanup: true
   on:
-    branch: testing-tag
+    tags: true
     
 notifications:
   email: false   

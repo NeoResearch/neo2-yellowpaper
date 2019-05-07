@@ -2,6 +2,12 @@ sudo: required
 services:
 - docker
 
+before_deploy:
+ - git config --local user.name "NeoResearch-Travis-Bot"
+ - git config --local user.email "neoresearchbot@gmail.com"
+ - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
+ - git tag $TRAVIS_TAG
+      
 script:
 - ./docker_build.sh
 - ./docker_run.sh
@@ -13,7 +19,7 @@ deploy:
     - ./build/yellow_paper.pdf
   skip_cleanup: true
   on:
-    branch: master
+    branch: testing-tag
     
 notifications:
   email: false   

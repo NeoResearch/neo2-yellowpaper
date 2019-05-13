@@ -7,6 +7,7 @@ before_deploy:
  - git config --local user.email "neoresearchbot@gmail.com"
  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'Specification-Automatic-Release-%Y%m%d')-$(git log --format=%h -1)}
  - git tag $TRAVIS_TAG
+ - git tag latest
       
 script:
 - ./docker_build.sh
@@ -19,7 +20,7 @@ deploy:
     - ./build/yellow_paper.pdf
   skip_cleanup: true
   on:
-    branch: master
+    branch: testing-tag-latest
     
 notifications:
   email: false   

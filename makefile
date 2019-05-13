@@ -35,7 +35,7 @@ debian_install:
 
 section: merge_sections
 	echo building yellow paper section $(SECTION)
-	cat sections/00_Preamble.md > chapter.md
+	cat sections/00_Preamble > chapter.md
 	#echo "" >> chapter.md
 	#python chapter_heading.py sections/$(SECTION).yaml #>> chapter.md
 	echo "" >> chapter.md

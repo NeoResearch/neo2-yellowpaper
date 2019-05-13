@@ -32,16 +32,24 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for the NEO network and blockchain protocols in general.
 
-* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine.
+* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine, as well as when quorum of the majority is not achieved.
 A timeout mechanism is used, and by doubling delays exponentially at every view, pBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
 In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
 
   * Considering 15 second blocks: 15 << 1 is 30s (first change view); 15 << 2 is 60s; 15 << 3 is 120s; 15 << 4 is 240s.
   * Considering 1 second blocks: 1 << 1 is 2s; 1 << 2 is 4s; 1 << 3 is 8s; 1 << 4 is 16s.
 
-It should be noticed that a nodes do not increase change view time until they do not pass to a higher view.
-In this sense, timer might expire more than 1 time for each view.
+In addition, timeout is postponed each time that the protocol detects that nodes are reaching an agreement on the current block.
+For example, it is currently set to around 40% of block time when `PrepareRequest` or `PrepareResponse` payloads are received, while
+80% for `Commits`.
+The reasoning behind this is that CN can delay their timeouts when they believe in the current network topology.
+Thus, timeout may have two time parcels, one fixed (according to the current view) and another one that is represented in terms of increments.
+It should be noticed that the fixed portion do not increase until the node does not move to a higher view.
+Timers might expire more than 1 time for each view, rebroadcasting its current change view request.
 Without loss of generality this can happen since change view is considered to be a locked state.
+
+Regarding the locked state, it should be noticed that after requesting `ChangeView` the node still can be unlocked.
+The latter happens only in a special condiction, in which, at least, `F` nodes are known as lost or committed.
 
 The considered network on pBFT assumes that it "may fail to deliver messages, delay them, duplicate them, or deliver them out of order." They also considered public-key cryptography to validate the identity of replicas, which is also the same for NEO dBFT.
 Since the algorithm does not rely on synchrony for safety, it must rely on it for liveness^[This was demonstrated by paper "Impossibility of distributed consensus with one faulty process"].
@@ -109,7 +117,7 @@ dBFT states are the following:
 
 * ViewChanging : true if view change mechanism has been triggered, false otherwise
 
-* MoreThanFNodesCommittedOrLost : true in the case that more than `F` nodes are locked in the commited phase or considered to be lost (introduced in dBFT 2.0).
+* MoreThanFNodesCommittedOrLost : true in the case that more than `F` nodes are locked in the committed phase or considered to be lost (introduced in dBFT 2.0).
 
 * IsRecovering : true if a valid recovery payload was received and is being processed (introduced in dBFT 2.0: internal state)
 

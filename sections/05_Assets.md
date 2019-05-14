@@ -1,1 +1,7 @@
-# Neo Assets: Global UTXO vs Account Models vs Tokens
+# Neo Assets: Account Models vs Tokens
+
+## Account Models
+
+## Tokens
+
+## Native Contracts

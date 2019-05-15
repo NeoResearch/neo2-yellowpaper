@@ -1,14 +1,14 @@
 ---
-title: Community Yellow Paper&#58; A Technical Specification for NEO Blockchain
+title: Community Specification Paper&#58; A Technical Specification for NEO Blockchain
 author:
 - Igor M. Coelho
 - Vitor N. Coelho
 - Peter Lin
 - Erik Zhang
 abstract: |
-  The Community Yellow Paper is a community-driven initiative to provide a technical specification for NEO blockchain.
+  The Community Specification Yellow Paper is a community-driven initiative to provide a technical specification for NEO blockchain.
   Contributions are accepted via project GitHub page, so feel free to contribute.
-  Major contributions by community members will allow member to become a co-author of our Yellow Paper.
+  Major contributions by community members will allow member to become a co-author of our Paper.
 
   &nbsp;
 numbersections: true

@@ -4,6 +4,8 @@
 
 Community Yellow Paper: A Technical Specification for Neo Blockchain
 
+For more specific and dedicated specification, please check [NEO Specification](https://github.com/neo-project/specification). This current repo is focussed on a didactic description of NEO and its transformations, in form of a Yellow Paper.
+
 ## document format
 The Community Yellow Paper base document started as pure LaTeX, as usual in academic publications, however the syntax is not considered as friendly as Markdown. So, why not merge both? :)
 In order to facilitate the contributions to the document, we decided to adopt pandoc format, which allows hybrid LaTeX + Markdown syntax.

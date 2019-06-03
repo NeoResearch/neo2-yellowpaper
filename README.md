@@ -1,4 +1,8 @@
-<img src="/doc-base/neo.png" align="right" height="70"/>
+<p align="center">
+    <img
+      src="https://github.com/NeoResearch/neoresearch.github.io/blob/master/assets/images/logo/Gemcut-butterfly/butterfly-banner.png"
+       />
+</p>
 
 # NEO Yellow Paper
 
@@ -67,6 +71,4 @@ When adding new original material to this project, contributor agrees that it wi
 
 The beautiful Pandoc/LaTeX template [Eisvogel](https://github.com/Wandmalfarbe/pandoc-latex-template/) is licensed by BSD 3-Clause License.
 
-Copyleft 2018-2019
-
-From Neo Community to You
+NeoResearch Community (2018-2019)

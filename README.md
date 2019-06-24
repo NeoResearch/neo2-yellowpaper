@@ -40,9 +40,9 @@ Current draft proposal includes 11 sections + references (this may be changed by
 
 
 ## build instructions (manual build)
-Install pandoc and LaTeX base (try [pandoc](https://pandoc.org/try)). On debian-based linux, you can simply run `make install`, and all dependencies will be installed.
+Install pandoc, [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref) and LaTeX base (try [pandoc](https://pandoc.org/try)). On debian-based linux, you can simply run `make install`, and all dependencies will be installed.
 
-After pandoc and LaTeX base are available, you can simply run `make`, which will generate the yellow paper pdf.
+After pandoc, pandoc-crossref and LaTeX base are available, you can simply run `make`, which will generate the yellow paper pdf.
 
 ### building specific section
 Any section can be build using command `make section` and passing `SECTION` parameter.

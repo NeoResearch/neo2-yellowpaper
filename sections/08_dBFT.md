@@ -32,7 +32,7 @@ Given $n=3f+1$ replicas of a State Machine, organized as Primary and Backup node
 
 * Safety property ensures that all processes will execute as atomic, either executing on all nodes, or reverting as a whole. This is possible due to the deterministic nature of the process (executed on every node), which is also valid for the NEO network and blockchain protocols in general.
 
-* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch Primary node when it seems Byzantine, as well as when quorum of the majority is not achieved.
+* Liveness guarantees that the network won't be stopped (unless more than $f$ byzantine nodes exist), by using a mechanism called "change view", which allows Backup nodes to switch a Primary node when it seems Byzantine, as well as when quorum of the majority is not achieved.
 A timeout mechanism is used, and by doubling delays exponentially at every view, pBFT can prevent attacks from malicious network delays that cannot grow indefinitely.
 In the current formula, timeout happens following a left-shift operator according to the current view number, for example:
 

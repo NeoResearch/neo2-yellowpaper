@@ -355,7 +355,7 @@ digraph dBFT {
   ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
   IsRecovering -> Backup [ label = "Preparations < M" ];
   IsRecovering -> Initial [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nPreparations < M" ];
-  IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nEnoughPreparations\n Possibly some commits" ];
+  IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\n&EnoughPreparations" ];
   CommitSent -> Recover [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
   Recover -> IsRecovering [ label = "OnRecoveryMessageReceived" ];
   CommitSent -> BlockSent [ label = "EnoughCommits" ];
@@ -388,6 +388,50 @@ If anyone could detect such malicious behavior, then, that node would "automatic
 * at maximum, $f$, nodes will send incorrect information (unlikely as it could reveal malicious behavior);
 * at maximum, $f$, nodes will try to keep correct information for strategic occasions.
 
+## dBFT 3.0 - Cancel phase
+
+
+<!-- node [shape = doublecircle]; BlockSent; -->
+
+~~~~ {.graphviz
+      #fig:dbft-v3-cancel-phase caption="dBFT 3.0 State Machine" width=90% filename="graphviz-dbft-v3-cancel-phase"}
+digraph dBFT {
+  graph [bgcolor=lightgoldenrodyellow]
+        //rankdir=LR;
+        size="11";
+  Empty [ label="", width=0, height=0, style = invis ];
+	node [shape = circle]; Initial;
+	node [shape = circle];
+  Empty -> Initialize [ ]
+  Initialize -> RecoverRequest [ label = "Send RecoverRequest", style="dashed" ];
+  Initialize -> Initial [label = "InitializeConsensus(0)"];
+  RelayedBlocks -> Initial [ label = "Exists relayed block with Hb > H => \ncancel all other current states" ];
+  Initial -> Primary [ label = "i \in [HASH((H-1)) random (v), HASH((H-1)) random (v) + f+ 1]" ];
+  Initial -> Backup [ label = "not PRIMARY CONDITION" ];
+  Backup -> ViewChanging [ label = "(C >= T exp(v+1))? & CountCommittedOrLost <= f\n C := 0" ];
+  Backup -> RecoverRequest [ label = "EnoughCancels for i \n &NOT OnPrepareRequest_i", style="dashed" ];
+  Backup -> PrepRequestSentOrReceived [ label = "EnoughCancels_i\n& OnPrepareRequest_i "];
+  Primary -> PrepRequestSentOrReceived [ label = "FillContext_i\n (C >= T)? & (NOT Receive CancelOrPrepReq_j, for any P(j) > P(i))\nC := 0" ];
+  Primary -> ViewChanging [ label = "(C >= T exp(v+1) - T)? & CountCommittedOrLost <= f \n C := 0" ];
+  Primary -> Backup [ label = "OnPrepareRequest_j or AnyCancel_j\n for all P(j) > P(i)"];
+  PrepRequestSentOrReceived -> ViewChanging [ label = "(C >= T exp(v+1) - T)? & CountCommittedOrLost <= f \n C := 0" ];
+  PrepRequestSentOrReceived -> CommitSent [ label = "ValidBlock\n EnoughPreparations" ];
+  PrepRequestSentOrReceived -> RecoverRequest [ label = "OnPrepareRequest_i \n& PrepareResponse_j, for P(i) > P(j)", style="dashed" ];
+  PrepRequestSentOrReceived -> RecoverRequest [ label = "EnoughCancels_i \n& PrepareResponse_j, for P(i) > P(j)", style="dashed" ];
+  PrepRequestSentOrReceived -> RecoverRequest [ label = "(C >= T exp(v+1) - T)? \n& NOT CountCommittedOrLost < f", style="dashed" ];
+  Backup -> RecoverRequest [ label = "(C >= T exp(v+1) - T)? \n& NOT CountCommittedOrLost < f", style="dashed" ];
+  ViewChanging -> Initial [ label = "EnoughViewChanges\n v := v+1 \n C := 0" ];
+  IsRecovering -> PrepRequestSentOrReceived [ label = "EnoughCancels_i &\n PrepareRequest_i" ];
+  IsRecovering -> Initial [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\nPreparations < M" ];
+  IsRecovering -> CommitSent [ label = "(EnoughViewChanges =>\n C := 0 && v := v + x)\n&EnoughPreparations" ];
+  RecoverRequest -> CNRecoveries [ label = "Can trigger up to f Recoveries", style="dashed" ];
+  CommitSent -> CNRecoveries [ label = "Triggers recover\n every C >= T exp(1)) ", style="dashed" ];
+  CNRecoveries -> IsRecovering [ label = "OnRecoveryMessageReceived()" ];
+  CommitSent -> BlockSent [ label = "EnoughCommits" ];
+  BlockSent -> RelayedBlocks [ label = "Relay block", style="dashed" ];
+  ExternalNodes -> RelayedBlocks [ label = "Relay block", style="dashed" ];
+}
+~~~~~~~~~~~~
 
 ## A MILP Model for Failures and Attacks on a BFT Blockchain Protocol {#sec:dBFT_MILP}
 
